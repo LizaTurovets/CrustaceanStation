@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Clock : MonoBehaviour
@@ -27,6 +25,10 @@ public class Clock : MonoBehaviour
     private GameObject[] trains;
 
     [SerializeField] private GameObject clockHand;
+
+
+    // CRABS
+    [SerializeField] private Kiosk kiosk;
 
 
     private void Awake()
@@ -61,7 +63,7 @@ public class Clock : MonoBehaviour
     {
         while (currentTime < endTime)
         {
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(5f);
 
             // rotate clock hand
             yield return RotateHand();
@@ -72,20 +74,23 @@ public class Clock : MonoBehaviour
             if (currentTime == startTime + 1)
             {
                 AddTrains();
+                kiosk.SummonCrab();
             }
             else
             {
                 foreach (GameObject train in trains)
                 {
-                    if (train == null) { continue; }
-                    TrainController trainController = train.GetComponent<TrainController>();
-                    if (currentTime == trainController.GetArrivalTime())
+                    TrainController controller = train.GetComponent<TrainController>();
+                    if (controller != null)
                     {
-                        trainController.arriveTrain();
-                    }
-                    else if (currentTime == trainController.GetDepartureTime())
-                    {
-                        trainController.departTrain();
+                        if (currentTime == controller.GetArrivalTime())
+                        {
+                            controller.arriveTrain();
+                        }
+                        else if (currentTime == controller.GetDepartureTime())
+                        {
+                            controller.departTrain();
+                        }
                     }
 
                 }
@@ -116,7 +121,11 @@ public class Clock : MonoBehaviour
     {
         foreach (GameObject train in trains)
         {
-            train.GetComponent<TrainController>().departTrain();
+            TrainController controller = train.GetComponent<TrainController>();
+            if (controller != null)
+            {
+                controller.departTrain();
+            }    
         }
     }
 
@@ -125,7 +134,11 @@ public class Clock : MonoBehaviour
     {
         foreach (GameObject train in trains)
         {
-            train.GetComponent<TrainController>().arriveTrain();
+            TrainController controller = train.GetComponent<TrainController>();
+            if (controller != null)
+            {
+                controller.arriveTrain();
+            }    
         }
     }
 }

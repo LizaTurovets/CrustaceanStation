@@ -96,7 +96,7 @@ public class TrainController : MonoBehaviour
                 {
                     isDeparting = false;
                     isMoving = false;
-                    Destroy(gameObject);
+                    Destroy(this);
                 }
 
             }
