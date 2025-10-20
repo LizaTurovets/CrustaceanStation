@@ -337,8 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1de655da3c5134fe599f06c622a8622a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainController
-  trainInfo: {fileID: 11400000, guid: 82861159786d74c268be4714ab0d50e1, type: 2}
   trainTransform: {fileID: 304388720}
+  trainInfo: {fileID: 11400000, guid: 82861159786d74c268be4714ab0d50e1, type: 2}
+  text: {fileID: 0}
 --- !u!65 &304388717
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -884,8 +885,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1de655da3c5134fe599f06c622a8622a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainController
-  trainInfo: {fileID: 11400000, guid: 77cd8c5874e7f49d2b0eba3eac13336c, type: 2}
   trainTransform: {fileID: 358256956}
+  trainInfo: {fileID: 11400000, guid: 77cd8c5874e7f49d2b0eba3eac13336c, type: 2}
+  text: {fileID: 0}
 --- !u!65 &358256953
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1419,6 +1421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Kiosk
   crabParentObject: {fileID: 460184287}
   canvas: {fileID: 728166974}
+  clock: {fileID: 1608822157}
 --- !u!1 &850543904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,8 +2006,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1de655da3c5134fe599f06c622a8622a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainController
-  trainInfo: {fileID: 11400000, guid: 19e24d8344c824cb1b6c0a884046804f, type: 2}
   trainTransform: {fileID: 1343808574}
+  trainInfo: {fileID: 11400000, guid: 19e24d8344c824cb1b6c0a884046804f, type: 2}
+  text: {fileID: 0}
 --- !u!65 &1343808571
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2689,6 +2693,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 850543905}
     m_Modifications:
+    - target: {fileID: 639268786297511233, guid: 37ebf1534176044a88b9f67a9f0ef189, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 223
+      objectReference: {fileID: 0}
     - target: {fileID: 2507450697859913015, guid: 37ebf1534176044a88b9f67a9f0ef189, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.79

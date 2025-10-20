@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ticket
   nameText: {fileID: 2563560616474404583}
-  trainIDText: {fileID: 0}
+  trainIDText: {fileID: 3008444151943196084}
 --- !u!1 &4352382361236996586
 GameObject:
   m_ObjectHideFlags: 0

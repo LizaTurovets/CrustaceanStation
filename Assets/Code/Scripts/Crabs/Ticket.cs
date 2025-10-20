@@ -7,7 +7,10 @@ public class Ticket : MonoBehaviour
     private string crabName;
 
     [SerializeField] private TextMeshProUGUI trainIDText;
-    private string trainID;
+    private string trainID = "G5";
+
+    private string[] letters = { "A", "B", "C", "D", "E", "F" };
+    private int[] numbers = { 1, 2, 3, 4 };
 
     public void SetName(string newName)
     {
@@ -19,5 +22,15 @@ public class Ticket : MonoBehaviour
     {
         trainID = newTrainID;
         trainIDText.text = trainID;
+    }
+
+    public string GetRandomTrainID()
+    {
+        return letters[Random.Range(0, letters.Length)] + numbers[Random.Range(0, numbers.Length)].ToString();
+    }
+
+    public string GetTrainID()
+    {
+        return trainID;
     }
 }

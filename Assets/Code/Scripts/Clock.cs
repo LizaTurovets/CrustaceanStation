@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Clock : MonoBehaviour
@@ -21,8 +22,9 @@ public class Clock : MonoBehaviour
     }
     [SerializeField] private GameObject trainPrefab;
     [SerializeField] private TrainInfoPair[] trainInfos;
-    private int numTrains = 4;
+    private int numTrains = 4;                                                      // TODO: Add more train ScriptableObjects
     private GameObject[] trains;
+    private List<TrainController> currentTrains = new List<TrainController>();
 
     [SerializeField] private GameObject clockHand;
 
@@ -58,6 +60,23 @@ public class Clock : MonoBehaviour
         }
     }
 
+    public string GetRandomCurrentTrainID()
+    {
+        return currentTrains[Random.Range(0, currentTrains.Count)].GetID();
+    }
+
+    public bool CheckTrainIDValidity(string id)
+    {
+        foreach (TrainController train in currentTrains)
+        {
+            if (id == train.GetID())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // CLOCK ANIMATION
     private IEnumerator TimeItself()
     {
@@ -69,15 +88,17 @@ public class Clock : MonoBehaviour
             yield return RotateHand();
 
             // check train arrivals and departures
-            currentTime++;
-
-            if (currentTime == startTime + 1)
+            if (currentTime == startTime)
             {
                 AddTrains();
-                kiosk.SummonCrab();
             }
             else
             {
+                if (currentTime == startTime + 1)
+                {
+                    kiosk.SummonCrab();
+                }
+
                 foreach (GameObject train in trains)
                 {
                     TrainController controller = train.GetComponent<TrainController>();
@@ -86,15 +107,20 @@ public class Clock : MonoBehaviour
                         if (currentTime == controller.GetArrivalTime())
                         {
                             controller.arriveTrain();
+                            currentTrains.Add(controller);
                         }
                         else if (currentTime == controller.GetDepartureTime())
                         {
                             controller.departTrain();
+                            currentTrains.Remove(controller);
+                            Debug.Log(currentTrains.Count);
                         }
                     }
 
                 }
             }
+            
+            currentTime++;
         }
     }
 

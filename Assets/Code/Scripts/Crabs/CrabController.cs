@@ -14,6 +14,7 @@ public class CrabController : MonoBehaviour
     [SerializeField] private GameObject idPrefab;
     private GameObject id;
     private CrabSelector crabSelector;
+    private string trainID = "";
 
 
     // VALIDITY
@@ -27,6 +28,10 @@ public class CrabController : MonoBehaviour
     private bool leavingKiosk = false;
     private Vector3 kioskEndPos; // where we want the crab to be when it's at the kiosk
     private Vector3 kioskStartPos; // where we want the crab to pop out from when it approaches the kiosk
+
+
+    //MISC
+    private Clock clock;
 
     void Awake()
     {
@@ -45,6 +50,10 @@ public class CrabController : MonoBehaviour
     {
         crabSelector = newSelector;
     }
+    
+    public void SetClock(Clock newClock) {
+        clock = newClock;
+    }
     public void PresentTicketAndID()
     {
         ticket = Instantiate(ticketPrefab, canvas.transform);
@@ -54,7 +63,7 @@ public class CrabController : MonoBehaviour
         // SOMETIMES GENERATE MISMATCHING INFO
         string crabName = crabInfo.crabName;
         Sprite crabPhoto = crabInfo.sprite;
-        if (Random.Range(0, 10) > 7)
+        if (Random.Range(0, 10) > 7)                    // RANDOM NAME
         {
             crabName = crabSelector.ChooseName();
             if (crabName != crabInfo.crabName)
@@ -62,7 +71,7 @@ public class CrabController : MonoBehaviour
                 isValid = false;
             }
         }
-        else if (Random.Range(0, 10) > 8)
+        if (Random.Range(0, 10) > 8)               // RANDOM SPRITE
         {
             crabPhoto = crabSelector.ChooseSprite();
             if (crabPhoto != crabInfo.sprite)
@@ -74,12 +83,12 @@ public class CrabController : MonoBehaviour
         // FIGURE OUT WHICH DOCUMENT IS FORGED
         if (!isValid)
         {
-            if (Random.Range(0, 10) > 5)
+            if (Random.Range(0, 10) > 5)                                       // FORGED ID
             {
                 ticket.GetComponent<Ticket>().SetName(crabName);
                 id.GetComponent<ID>().SetName(crabInfo.crabName);
             }
-            else
+            else                                                               // FORGED TICKET
             {
                 ticket.GetComponent<Ticket>().SetName(crabInfo.crabName);
                 id.GetComponent<ID>().SetName(crabName);
@@ -90,10 +99,28 @@ public class CrabController : MonoBehaviour
             ticket.GetComponent<Ticket>().SetName(crabName);
             id.GetComponent<ID>().SetName(crabName);
         }
-        
+
         id.GetComponent<ID>().SetIDPhoto(crabPhoto);
 
+        if (Random.Range(0, 10) > 6)                                            // MORE FORGERY! - TRAIN ID
+        {
+            trainID = ticket.GetComponent<Ticket>().GetRandomTrainID();
+        }
+        else
+        {
+            trainID = clock.GetRandomCurrentTrainID();
+            
+        }
+        ticket.GetComponent<Ticket>().SetTrainID(trainID);
+
     }
+
+    public string GetTrainID()
+    {
+        return trainID;
+    }
+
+
 
     public bool IsValid()
     {

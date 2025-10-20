@@ -8,7 +8,7 @@ public class Kiosk : MonoBehaviour
 
     [SerializeField] private GameObject crabParentObject;
     [SerializeField] private GameObject canvas;
-
+    [SerializeField] private Clock clock;
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
@@ -19,11 +19,19 @@ public class Kiosk : MonoBehaviour
         currentCrab = Instantiate(crabSelector.ChooseCrab(), crabParentObject.transform);
         currentCrab.GetComponent<CrabController>().SetCanvas(canvas.GetComponent<Canvas>());
         currentCrab.GetComponent<CrabController>().SetCrabSelector(crabSelector);
+        currentCrab.GetComponent<CrabController>().SetClock(clock);
         currentCrab.GetComponent<CrabController>().MakeAppear();
     }
     public void OnApprove()
     {
-        if (currentCrab.GetComponent<CrabController>().IsValid())
+        bool trainExists = false;
+        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
+        {
+            trainExists = true;
+        }
+            
+
+        if (currentCrab.GetComponent<CrabController>().IsValid() && trainExists)               // COMPLETELY VALID
         {
             currentCrab.GetComponent<CrabController>().MakeDisappear();
             // TODO: Logic for selecting train
@@ -32,7 +40,7 @@ public class Kiosk : MonoBehaviour
             //wait a moment
             StartCoroutine(WaitAMoment());
         }
-        else
+        else                                                                    // FORGERY!
         {
             // consequences?
         }
@@ -41,7 +49,13 @@ public class Kiosk : MonoBehaviour
 
     public void OnReject()
     {
-        if (!currentCrab.GetComponent<CrabController>().IsValid())
+        bool trainExists = false;
+        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
+        {
+            trainExists = true;
+        }
+
+        if (!currentCrab.GetComponent<CrabController>().IsValid() || !trainExists)
         {
             currentCrab.GetComponent<CrabController>().MakeDisappear();
             // TODO: crab make sad sound
