@@ -97,6 +97,7 @@ public class Clock : MonoBehaviour
                 if (currentTime == startTime + 1)
                 {
                     kiosk.SummonCrab();
+                    kiosk.OpenKiosk();
                 }
 
                 foreach (GameObject train in trains)

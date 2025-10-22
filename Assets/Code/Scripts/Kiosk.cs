@@ -9,6 +9,8 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private GameObject crabParentObject;
     [SerializeField] private GameObject canvas;
     [SerializeField] private Clock clock;
+
+    private bool isOpen = false;
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
@@ -24,6 +26,8 @@ public class Kiosk : MonoBehaviour
     }
     public void OnApprove()
     {
+        if (!isOpen) return;
+
         bool trainExists = false;
         if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
         {
@@ -49,6 +53,8 @@ public class Kiosk : MonoBehaviour
 
     public void OnReject()
     {
+        if (!isOpen) return;
+
         bool trainExists = false;
         if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
         {
@@ -69,7 +75,10 @@ public class Kiosk : MonoBehaviour
         }
     }
 
-
+    public void OpenKiosk()
+    {
+        isOpen = true;
+    }
     private IEnumerator WaitAMoment()
     {
         yield return new WaitForSeconds(3f);
