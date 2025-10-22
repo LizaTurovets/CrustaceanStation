@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Clock : MonoBehaviour
@@ -23,10 +22,15 @@ public class Clock : MonoBehaviour
     }
     [SerializeField] private GameObject trainPrefab;
     [SerializeField] private TrainInfoPair[] trainInfos;
-    private int numTrains = 4;
+    private int numTrains = 4;                                                      // TODO: Add more train ScriptableObjects
     private GameObject[] trains;
+    private List<TrainController> currentTrains = new List<TrainController>();
 
     [SerializeField] private GameObject clockHand;
+
+
+    // CRABS
+    [SerializeField] private Kiosk kiosk;
 
 
     private void Awake()
@@ -56,40 +60,68 @@ public class Clock : MonoBehaviour
         }
     }
 
+    public string GetRandomCurrentTrainID()
+    {
+        return currentTrains[Random.Range(0, currentTrains.Count)].GetID();
+    }
+
+    public bool CheckTrainIDValidity(string id)
+    {
+        foreach (TrainController train in currentTrains)
+        {
+            if (id == train.GetID())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // CLOCK ANIMATION
     private IEnumerator TimeItself()
     {
         while (currentTime < endTime)
         {
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(5f);
 
             // rotate clock hand
             yield return RotateHand();
 
             // check train arrivals and departures
-            currentTime++;
-
-            if (currentTime == startTime + 1)
+            if (currentTime == startTime)
             {
                 AddTrains();
             }
             else
             {
+                if (currentTime == startTime + 1)
+                {
+                    kiosk.SummonCrab();
+                    kiosk.OpenKiosk();
+                }
+
                 foreach (GameObject train in trains)
                 {
-                    if (train == null) { continue; }
-                    TrainController trainController = train.GetComponent<TrainController>();
-                    if (currentTime == trainController.GetArrivalTime())
+                    TrainController controller = train.GetComponent<TrainController>();
+                    if (controller != null)
                     {
-                        trainController.arriveTrain();
-                    }
-                    else if (currentTime == trainController.GetDepartureTime())
-                    {
-                        trainController.departTrain();
+                        if (currentTime == controller.GetArrivalTime())
+                        {
+                            controller.arriveTrain();
+                            currentTrains.Add(controller);
+                        }
+                        else if (currentTime == controller.GetDepartureTime())
+                        {
+                            controller.departTrain();
+                            currentTrains.Remove(controller);
+                            Debug.Log(currentTrains.Count);
+                        }
                     }
 
                 }
             }
+            
+            currentTime++;
         }
     }
 
@@ -116,7 +148,11 @@ public class Clock : MonoBehaviour
     {
         foreach (GameObject train in trains)
         {
-            train.GetComponent<TrainController>().departTrain();
+            TrainController controller = train.GetComponent<TrainController>();
+            if (controller != null)
+            {
+                controller.departTrain();
+            }    
         }
     }
 
@@ -125,7 +161,11 @@ public class Clock : MonoBehaviour
     {
         foreach (GameObject train in trains)
         {
-            train.GetComponent<TrainController>().arriveTrain();
+            TrainController controller = train.GetComponent<TrainController>();
+            if (controller != null)
+            {
+                controller.arriveTrain();
+            }    
         }
     }
 }
