@@ -1,16 +1,20 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public class Kiosk : MonoBehaviour
 {
     private CrabSelector crabSelector;
-    private GameObject prevCrab;
     private GameObject currentCrab;
-
-    [SerializeField] private GameObject crabParentObject;
-    [SerializeField] private GameObject canvas;
     [SerializeField] private Clock clock;
 
+    [SerializeField] private GameObject crabParentObject; // in scene hierarchy: canvas > crabs
+    [SerializeField] private GameObject canvas;
+
+    [SerializeField] private TextMeshProUGUI coinCountText;
+
     private bool isOpen = false;
+
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
@@ -37,12 +41,12 @@ public class Kiosk : MonoBehaviour
 
         if (currentCrab.GetComponent<CrabController>().IsValid() && trainExists)               // COMPLETELY VALID
         {
-            currentCrab.GetComponent<CrabController>().MakeDisappear();
+            //currentCrab.GetComponent<CrabController>().MakeDisappear();
             // TODO: Logic for selecting train
-
+            clock.SetTrainsClickable(true);
 
             //wait a moment
-            StartCoroutine(WaitAMoment());
+            //StartCoroutine(WaitAMoment());
         }
         else                                                                    // FORGERY!
         {
@@ -75,6 +79,18 @@ public class Kiosk : MonoBehaviour
         }
     }
 
+    public void GivePlayerCoins(int newCoins)
+    {
+        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + newCoins);
+        coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
+    }
+
+    public void DisappearCrab()
+    {
+        currentCrab.GetComponent<CrabController>().MakeDisappear();
+        StartCoroutine(WaitAMoment());
+    }
+
     public void OpenKiosk()
     {
         isOpen = true;
@@ -83,7 +99,6 @@ public class Kiosk : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        prevCrab = currentCrab;
         Destroy(currentCrab);
         SummonCrab();
     }
