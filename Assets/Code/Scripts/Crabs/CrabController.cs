@@ -63,7 +63,7 @@ public class CrabController : MonoBehaviour
         // SOMETIMES GENERATE MISMATCHING INFO
         string crabName = crabInfo.crabName;
         Sprite crabPhoto = crabInfo.sprite;
-        if (Random.Range(0, 10) > 7)                    // RANDOM NAME
+        if (Random.Range(0, 10) > 8)                    // RANDOM NAME
         {
             crabName = crabSelector.ChooseName();
             if (crabName != crabInfo.crabName)
@@ -83,7 +83,7 @@ public class CrabController : MonoBehaviour
         // FIGURE OUT WHICH DOCUMENT IS FORGED
         if (!isValid)
         {
-            if (Random.Range(0, 10) > 5)                                       // FORGED ID
+            if (Random.Range(0, 10) > 8)                                       // FORGED ID
             {
                 ticket.GetComponent<Ticket>().SetName(crabName);
                 id.GetComponent<ID>().SetName(crabInfo.crabName);
@@ -102,7 +102,7 @@ public class CrabController : MonoBehaviour
 
         id.GetComponent<ID>().SetIDPhoto(crabPhoto);
 
-        if (Random.Range(0, 10) > 6)                                            // MORE FORGERY! - TRAIN ID
+        if (Random.Range(0, 10) > 8)                                            // MORE FORGERY! - TRAIN ID
         {
             trainID = ticket.GetComponent<Ticket>().GetRandomTrainID();
         }

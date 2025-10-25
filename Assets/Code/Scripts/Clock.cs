@@ -8,7 +8,7 @@ public class Clock : MonoBehaviour
     // day is 8am to 8pm, each hour is 2 minutes
     private int startTime = 0;
     private int endTime = 12;
-    private int currentTime;
+    private int currentTime = 0;
     private float rotateAmount = 30.0f;
     [SerializeField] private float rotDuration = 1.0f;
 
@@ -54,6 +54,7 @@ public class Clock : MonoBehaviour
                 }
             }
             train.GetComponent<TrainController>().SetTrainInfo(trainInfos[idx].trainInfo);
+            train.GetComponent<TrainController>().SetKiosk(kiosk);
             trainInfos[idx].chosen = true;
 
             trains[i] = train;
@@ -77,16 +78,19 @@ public class Clock : MonoBehaviour
         return false;
     }
 
+    public void SetTrainsClickable(bool allowClick)
+    {
+        foreach (TrainController train in currentTrains)
+        {
+            train.SetThisClickable(allowClick);
+        }
+    }
+
     // CLOCK ANIMATION
     private IEnumerator TimeItself()
     {
         while (currentTime < endTime)
         {
-            yield return new WaitForSeconds(5f);
-
-            // rotate clock hand
-            yield return RotateHand();
-
             // check train arrivals and departures
             if (currentTime == startTime)
             {
@@ -114,13 +118,16 @@ public class Clock : MonoBehaviour
                         {
                             controller.departTrain();
                             currentTrains.Remove(controller);
-                            Debug.Log(currentTrains.Count);
                         }
                     }
 
                 }
             }
-            
+
+            yield return new WaitForSeconds(5f);
+
+            // rotate clock hand
+            yield return RotateHand();
             currentTime++;
         }
     }

@@ -23,6 +23,12 @@ public class TrainController : MonoBehaviour
     private string[] trainIDLetters = { "A", "B", "C", "D", "E", "F" };
     private string trainID = "";
 
+    private int crabsOnTrain = 0;
+
+    // SELECTION
+    [SerializeField] private TrainSelection trainSelection;
+    private Kiosk kiosk;
+
     // GETTERS
     public float GetArrivalTime()
     {
@@ -40,9 +46,20 @@ public class TrainController : MonoBehaviour
         Init();
     }
 
+    public void SetKiosk(Kiosk newKiosk)
+    {
+        kiosk = newKiosk;
+        trainSelection.SetKiosk(newKiosk);
+    }
+
     public string GetID()
     {
         return trainID;
+    }
+
+    public void SetThisClickable(bool isClickable)
+    {
+        trainSelection.SetThisClickable(isClickable);
     }
 
     public void Init()
@@ -97,21 +114,26 @@ public class TrainController : MonoBehaviour
     {   
         text.text = "";
         // calculate capacity
-
+        int coins = crabsOnTrain; // replace with economy * 1 + standard * 2 + premium * 3
 
         // give player coins
-
+        kiosk.GivePlayerCoins(coins);
 
         // move train offscreen (down)
         isMoving = true;
         isDeparting = true;
     }
 
+    public void AddToCrabsOnTrain()
+    {
+        crabsOnTrain++;
+    }
+
 	private void Update()
-	{
+    {
         if (isMoving)
         {
-            
+
             if (isArriving)
             {
                 // move train down from offscreen
@@ -140,5 +162,5 @@ public class TrainController : MonoBehaviour
 
             }
         }
-	}
+    }
 }
