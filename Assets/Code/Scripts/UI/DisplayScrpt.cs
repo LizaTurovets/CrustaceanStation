@@ -13,7 +13,6 @@ public class DisplayScrpt : MonoBehaviour
     
     void Start()
     {
-        Debug.Log("started");
         displayed = false;
         transform.position = offPos;
     }
@@ -25,13 +24,11 @@ public class DisplayScrpt : MonoBehaviour
         {
             if (!displayed)
             {
-                Debug.Log("on");
                 moving = true;
             } 
             
             if (displayed)               
             {
-                Debug.Log("off");
                 moving = true;
 
             }
@@ -44,15 +41,11 @@ public class DisplayScrpt : MonoBehaviour
             {
                 var step = speed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, offPos, step);
-                Debug.Log(transform.position.y);
-                Debug.Log(offPos.y);
                 if (transform.position.y <= offPos.y || Mathf.Abs(transform.position.y - offPos.y) < 0.0001f)
                 {
                     moving = false;
-                    Debug.Log("off moving stopped");
                     displayed = false;
                 }
-                Debug.Log("down exited");
             }
 
             // bring the screen up
@@ -63,12 +56,9 @@ public class DisplayScrpt : MonoBehaviour
                 if (transform.position.y >= onPos.y || Mathf.Abs(transform.position.y - onPos.y) < 0.0001f)
                 {
                     moving = false;
-                    Debug.Log("on moving stopped");
                     displayed = true;
                 }
-                Debug.Log("up exited");
             }
-        Debug.Log(transform.position.y);
         }
     }
 
