@@ -16,7 +16,6 @@ public class TrainSelection : MonoBehaviour, IPointerClickHandler
         kiosk = newKiosk;
     }
 
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isClickable)

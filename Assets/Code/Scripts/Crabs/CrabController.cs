@@ -7,8 +7,9 @@ public class CrabController : MonoBehaviour
 
     [SerializeField] private Canvas canvas;
 
-    
+
     // TICKET AND ID
+    private GameObject ticketAndIDParentObject;
     [SerializeField] private GameObject ticketPrefab;
     private GameObject ticket;
     [SerializeField] private GameObject idPrefab;
@@ -54,11 +55,22 @@ public class CrabController : MonoBehaviour
     public void SetClock(Clock newClock) {
         clock = newClock;
     }
+
+    public void SetTicketAndIDParentObject(GameObject newParent)
+    {
+        ticketAndIDParentObject = newParent;
+    }
+
     public void PresentTicketAndID()
     {
-        ticket = Instantiate(ticketPrefab, canvas.transform);
-        id = Instantiate(idPrefab, canvas.transform);
+        ticket = Instantiate(ticketPrefab, ticketAndIDParentObject.transform);
+        id = Instantiate(idPrefab, ticketAndIDParentObject.transform);
 
+        ticket.GetComponent<Ticket>().SetID(id.GetComponent<ID>());
+        id.GetComponent<ID>().SetTicket(ticket.GetComponent<Ticket>());
+
+        ticket.GetComponent<Ticket>().PushBack();
+        id.GetComponent<ID>().BringForward();
 
         // SOMETIMES GENERATE MISMATCHING INFO
         string crabName = crabInfo.crabName;
@@ -109,7 +121,7 @@ public class CrabController : MonoBehaviour
         else
         {
             trainID = clock.GetRandomCurrentTrainID();
-            
+
         }
         ticket.GetComponent<Ticket>().SetTrainID(trainID);
 
