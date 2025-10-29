@@ -8,12 +8,15 @@ public class DisplayScrpt : MonoBehaviour
     private Vector3 offPos = new Vector3(0, -6.0f, -2);
     private Vector3 onPos = new Vector3(0, 1.0f, -2);
     private bool moving = false;
-    // pause the game when displayed == true
+    // displayed is for animation purposes
     [SerializeField] private bool displayed;
-    
+    // pause the game when paused == true
+    [SerializeField] private bool paused;
+
     void Start()
     {
         displayed = false;
+        paused = false;
         transform.position = offPos;
     }
 
@@ -22,16 +25,21 @@ public class DisplayScrpt : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // pause
             if (!displayed)
             {
+                paused = true;
                 moving = true;
             } 
             
+            // unpause
             if (displayed)               
             {
+                paused = false;
                 moving = true;
 
             }
+            Debug.Log(paused);
         }
 
         if (moving) 
@@ -62,9 +70,15 @@ public class DisplayScrpt : MonoBehaviour
         }
     }
 
+    // clicking continue
     public void DisplayOff()
     {
-        if (displayed) moving = true;
+        if (displayed) 
+        { 
+            moving = true;
+            paused = false; 
+        }
+        Debug.Log(paused);
     }
 
 
