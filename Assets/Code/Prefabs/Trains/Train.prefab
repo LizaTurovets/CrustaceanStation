@@ -338,9 +338,12 @@ MonoBehaviour:
   text: {fileID: 6671870268166931842}
   cartParent: {fileID: 5362420082589631693}
   cartTypes:
-  - {fileID: 8972088384346103965, guid: adbbfa6e634b94f8a8c2370a423a0776, type: 3}
-  - {fileID: 1984475248551268759, guid: 32a69e655c2e943a7bba0be97a72365a, type: 3}
-  - {fileID: 9032537571525134767, guid: 35539ffabe5254e88b4eaebffa3e8596, type: 3}
+  - cartPrefab: {fileID: 8972088384346103965, guid: adbbfa6e634b94f8a8c2370a423a0776, type: 3}
+    weight: 5
+  - cartPrefab: {fileID: 1984475248551268759, guid: 32a69e655c2e943a7bba0be97a72365a, type: 3}
+    weight: 10
+  - cartPrefab: {fileID: 9032537571525134767, guid: 35539ffabe5254e88b4eaebffa3e8596, type: 3}
+    weight: 15
   alertObject: {fileID: 1119015504978458765}
 --- !u!1 &8862759743973708597
 GameObject:
