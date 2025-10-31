@@ -9,6 +9,7 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private Clock clock;
 
     [SerializeField] private GameObject crabParentObject; // in scene hierarchy: canvas > crabs
+    [SerializeField] private GameObject ticketParentObject;
     [SerializeField] private GameObject canvas;
 
     [SerializeField] private TextMeshProUGUI coinCountText;
@@ -18,6 +19,7 @@ public class Kiosk : MonoBehaviour
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
+        coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
 
     public void SummonCrab()
@@ -26,6 +28,7 @@ public class Kiosk : MonoBehaviour
         currentCrab.GetComponent<CrabController>().SetCanvas(canvas.GetComponent<Canvas>());
         currentCrab.GetComponent<CrabController>().SetCrabSelector(crabSelector);
         currentCrab.GetComponent<CrabController>().SetClock(clock);
+        currentCrab.GetComponent<CrabController>().SetTicketAndIDParentObject(ticketParentObject);
         currentCrab.GetComponent<CrabController>().MakeAppear();
     }
     public void OnApprove()

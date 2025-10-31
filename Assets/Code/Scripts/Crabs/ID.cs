@@ -10,6 +10,9 @@ public class ID : MonoBehaviour
     [SerializeField] private Image image;
     private Sprite sprite;
 
+    [SerializeField] private GameObject blur;
+    [SerializeField] private RectTransform rectTransform;
+    private Ticket ticket;
 
     public void SetName(string newName)
     {
@@ -21,5 +24,37 @@ public class ID : MonoBehaviour
     {
         sprite = newSprite;
         image.sprite = sprite;
+    }
+
+    public void SetTicket(Ticket newTicket)
+    {
+        ticket = newTicket;
+    }
+
+    public void PushBack()
+    {
+        rectTransform.rotation = Quaternion.Euler(0, 0, -28.8f);
+
+        // move position
+        rectTransform.anchoredPosition = new Vector3(-363, -335, 64);
+
+        // remove blur
+        blur.SetActive(true);
+    }
+
+    public void BringForward()
+    {
+        // rotate
+        rectTransform.rotation = Quaternion.Euler(0, 0, 0);
+
+        // move position
+        rectTransform.anchoredPosition = new Vector3(-412.23f, -361.2999f, 44.85482f);
+
+        // remove blur
+        blur.SetActive(false);
+        rectTransform.SetAsLastSibling();
+
+
+        ticket.PushBack();
     }
 }

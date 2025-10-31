@@ -14,6 +14,8 @@ public class Clock : MonoBehaviour
     private float rotateAmount = 30.0f;
     [SerializeField] private float rotDuration = 1.0f;
 
+    private bool isPaused = false;
+
 
     // TRAIN INFO
     //[System.Serializable]
@@ -23,6 +25,7 @@ public class Clock : MonoBehaviour
         public bool chosen;
     }*/
     [SerializeField] private GameObject trainPrefab;
+    [SerializeField] private GameObject trainParent;
     //[SerializeField] private TrainInfoPair[] trainInfos;
     private List<TrainController> currentTrains = new List<TrainController>();
 
@@ -71,7 +74,8 @@ public class Clock : MonoBehaviour
         int timeSpent = Random.Range(3, 5);         // time spent at station
         int departure = arrival + timeSpent;
 
-        GameObject train = Instantiate(trainPrefab);
+        GameObject train = Instantiate(trainPrefab, trainParent.transform);
+        train.SetActive(true);
         train.GetComponent<TrainController>().SetTrainInfo(arrival, departure, trainID);
         train.GetComponent<TrainController>().SetKiosk(kiosk);
         trainsInLine.Add(train);
@@ -95,7 +99,8 @@ public class Clock : MonoBehaviour
                 doneWithThisID = true;
             }
 
-            train = Instantiate(trainPrefab);
+            train = Instantiate(trainPrefab, trainParent.transform);
+            train.SetActive(true);
             train.GetComponent<TrainController>().SetTrainInfo(arrival, departure, trainID);
             train.GetComponent<TrainController>().SetKiosk(kiosk);
             trainsInLine.Add(train);
@@ -136,6 +141,7 @@ public class Clock : MonoBehaviour
     {
         while (currentTime < endTime)
         {
+
             if (currentTime == startTime)
             {
                 AddTrains();
@@ -148,7 +154,7 @@ public class Clock : MonoBehaviour
                 CheckTrains();
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(10f);
 
             // rotate clock hand
             yield return RotateHand();
@@ -200,7 +206,7 @@ public class Clock : MonoBehaviour
     private IEnumerator RotateHand()
     {
         Quaternion startRot = clockHand.transform.rotation;
-        Quaternion endRot = startRot * Quaternion.Euler(0, -rotateAmount, 0);
+        Quaternion endRot = startRot * Quaternion.Euler(0, 0, -rotateAmount);
 
         float elapsed = 0f;
         while (elapsed < rotDuration)
@@ -211,6 +217,7 @@ public class Clock : MonoBehaviour
         }
 
         clockHand.transform.rotation = endRot;
+        
     }
 
     private IEnumerator WaitThenSummonCrabs()
