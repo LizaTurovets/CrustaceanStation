@@ -19,6 +19,7 @@ public class Kiosk : MonoBehaviour
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
+        coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
 
     public void SummonCrab()

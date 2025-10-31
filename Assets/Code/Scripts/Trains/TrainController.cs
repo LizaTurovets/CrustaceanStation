@@ -4,18 +4,20 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using System.Collections.Generic;
+using System.Data.Common;
 
 public class TrainController : MonoBehaviour
 {
     private bool isMoving = false;
     private bool isDeparting = false;
     private bool isArriving = false;
-    [SerializeField] private Transform trainTransform;
-
+    [SerializeField] private RectTransform trainTransform;
+ 
     private Vector3 startingPosArrive; // where the train is before it moves into the station
     private Vector3 startingPosDepart; // also endPosArrive
     private Vector3 endPosDepart; // where the train goes to be completely offscreen
-    private float speed = 10.0f;
+    private float speed = 600.0f;
 
     // IDS and INFO
     private Train trainInfo;
@@ -24,10 +26,13 @@ public class TrainController : MonoBehaviour
     private string[] trainIDLetters = { "A", "B", "C", "D", "E", "F" };
     private string trainID = "";
 
-    private int crabsOnTrain = 0;
+    private int coins = 0;
 
     // SELECTION
-    [SerializeField] private TrainSelection trainSelection;
+    [SerializeField] private GameObject cartParent;
+    [SerializeField] private GameObject[] cartTypes;
+    private List<TrainSelection> trainSelections = new List<TrainSelection>();
+    private float cartPosStartingPoint = 0f;
     private Kiosk kiosk;
 
     // ALERT
@@ -47,6 +52,7 @@ public class TrainController : MonoBehaviour
 
     public void SetTrainInfo(int newArrivalTime, int newDepartureTime, int newTrainID)
     {
+        trainInfo = ScriptableObject.CreateInstance<Train>();
         trainInfo.arrivalTimeHour = newArrivalTime;
         trainInfo.departureTimeHour = newDepartureTime;
         trainInfo.trainID = newTrainID;
@@ -55,7 +61,7 @@ public class TrainController : MonoBehaviour
 
     public bool IsStartTime0()
     {
-        return (trainInfo.arrivalTimeHour == 0);
+        return trainInfo.arrivalTimeHour == 0;
     }
     public void SetArrivalTime()
     {
@@ -65,7 +71,6 @@ public class TrainController : MonoBehaviour
     public void SetKiosk(Kiosk newKiosk)
     {
         kiosk = newKiosk;
-        trainSelection.SetKiosk(newKiosk);
     }
 
     public string GetID()
@@ -75,7 +80,9 @@ public class TrainController : MonoBehaviour
 
     public void SetThisClickable(bool isClickable)
     {
-        trainSelection.SetThisClickable(isClickable);
+        foreach (TrainSelection ts in trainSelections) {
+            ts.SetThisClickable(isClickable);
+        }
     }
 
     public void AboutToDepartAlert()
@@ -88,43 +95,79 @@ public class TrainController : MonoBehaviour
         float x = 0;
         if (trainInfo.trainID == 1)
         {
-            x = 1.5f;
-            text.rectTransform.anchoredPosition = new Vector2(223, -23);
-            alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(163, 28);
+            x = 194;
+            //text.rectTransform.anchoredPosition = new Vector2(223, -23);
+            //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(163, 28);
 
         }
         else if (trainInfo.trainID == 2)
         {
-            x = 3.5f;
-            text.rectTransform.anchoredPosition = new Vector2(440, -23);
-            alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(379, 28);
+            x = 394;
+            //text.rectTransform.anchoredPosition = new Vector2(440, -23);
+            //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(379, 28);
 
         }
         else if (trainInfo.trainID == 3)
         {
-            x = 5.5f;
-            text.rectTransform.anchoredPosition = new Vector2(657, -23);
-            alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(580, 28);
+            x = 594;
+            //text.rectTransform.anchoredPosition = new Vector2(657, -23);
+            //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(580, 28);
         }
         else if (trainInfo.trainID == 4)
         {
-            x = 7.5f;
-            text.rectTransform.anchoredPosition = new Vector2(874, -23);
-            alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(781, 28); 
+            x = 794;
+            //text.rectTransform.anchoredPosition = new Vector2(874, -23);
+            //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(781, 28); 
         }
 
-        startingPosArrive = new Vector3(x, 8.47f, 0);
-        startingPosDepart = new Vector3(x, 2.5f, 0);
-        endPosDepart = new Vector3(x, -7.0f, 0);
-        trainTransform.position = startingPosArrive;
+        startingPosArrive = new Vector3(x, 830, 0);
+        startingPosDepart = new Vector3(x, -250, 0);
+        endPosDepart = new Vector3(x, -1280, 0);
+        trainTransform.anchoredPosition = startingPosArrive;
 
         trainID = trainIDLetters[UnityEngine.Random.Range(0, trainIDLetters.Length)] + trainInfo.trainID.ToString();
     }
 
     private void Awake()
     {
-        trainInfo = ScriptableObject.CreateInstance<Train>();
         text.text = "";
+    }
+
+    private void Start()
+    {
+        int numOfCarts = UnityEngine.Random.Range(1, 5);
+        for (int i = 0; i < numOfCarts; i++)
+        {
+            // instantiate cart as child
+            GameObject cart = Instantiate(cartTypes[UnityEngine.Random.Range(0, 3)], cartParent.transform);
+            TrainSelection selection = cart.GetComponent<TrainSelection>();
+
+            // figure out position
+            if (i == 0)
+            {
+                // set position based on cart type
+                float startingPos = selection.getStartingPos();
+                cart.transform.localPosition = new Vector3(-30, startingPos, 0);
+
+                // add to cartPosStartingPoint
+                cartPosStartingPoint += startingPos + selection.getHeight();
+            }
+            else
+            {
+                // set position based on cartPosStartingPoint
+                cart.transform.localPosition = new Vector3(-30, cartPosStartingPoint, 0);
+
+                // add to cartPosStartingPoint
+                cartPosStartingPoint += selection.getHeight();
+            }
+
+            // add trainSelection to list
+            trainSelections.Add(selection);
+
+            // set kiosk
+            selection.SetKiosk(kiosk);
+            selection.SetController(this);
+        }
     }
 
     public void arriveTrain()
@@ -133,15 +176,11 @@ public class TrainController : MonoBehaviour
         isArriving = true;
 
         text.text = trainID;
-
-        // activate train picker?
-    }
+    } 
 
     public void departTrain()
     {
         text.text = "";
-        // calculate capacity
-        int coins = crabsOnTrain; // replace with economy * 1 + standard * 2 + premium * 3
 
         // give player coins
         kiosk.GivePlayerCoins(coins);
@@ -151,9 +190,9 @@ public class TrainController : MonoBehaviour
         isDeparting = true;
     }
 
-    public void AddToCrabsOnTrain()
+    public void AddToCrabsOnTrain(int ticketCost)
     {
-        crabsOnTrain++;
+        coins += ticketCost;
     }
 
     private void Update()
@@ -165,9 +204,9 @@ public class TrainController : MonoBehaviour
             {
                 // move train down from offscreen
                 var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, startingPosDepart, step);
+                trainTransform.anchoredPosition = Vector3.MoveTowards(trainTransform.anchoredPosition, startingPosDepart, step);
 
-                if (transform.position.y <= startingPosDepart.y)
+                if (trainTransform.anchoredPosition.y <= startingPosDepart.y)
                 {
                     isArriving = false;
                     isMoving = false;
@@ -179,9 +218,9 @@ public class TrainController : MonoBehaviour
 
                 // move train down from onscreen
                 var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, endPosDepart, step);
+                trainTransform.anchoredPosition = Vector3.MoveTowards(trainTransform.anchoredPosition, endPosDepart, step);
 
-                if (transform.position.y <= endPosDepart.y)
+                if (trainTransform.anchoredPosition.y <= endPosDepart.y)
                 {
                     isDeparting = false;
                     isMoving = false;
