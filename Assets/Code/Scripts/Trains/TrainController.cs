@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using System.Collections.Generic;
 using System.Data.Common;
+using JetBrains.Annotations;
 
 public class TrainController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class TrainController : MonoBehaviour
     private bool isDeparting = false;
     private bool isArriving = false;
     [SerializeField] private RectTransform trainTransform;
- 
+
     private Vector3 startingPosArrive; // where the train is before it moves into the station
     private Vector3 startingPosDepart; // also endPosArrive
     private Vector3 endPosDepart; // where the train goes to be completely offscreen
@@ -29,8 +30,14 @@ public class TrainController : MonoBehaviour
     private int coins = 0;
 
     // SELECTION
+    [Serializable]
+    private struct CartType
+    {
+        public GameObject cartPrefab;
+        public int weight;
+    }
     [SerializeField] private GameObject cartParent;
-    [SerializeField] private GameObject[] cartTypes;
+    [SerializeField] private CartType[] cartTypes;
     private List<TrainSelection> trainSelections = new List<TrainSelection>();
     private float cartPosStartingPoint = 0f;
     private Kiosk kiosk;
@@ -80,7 +87,8 @@ public class TrainController : MonoBehaviour
 
     public void SetThisClickable(bool isClickable)
     {
-        foreach (TrainSelection ts in trainSelections) {
+        foreach (TrainSelection ts in trainSelections)
+        {
             ts.SetThisClickable(isClickable);
         }
     }
@@ -139,7 +147,7 @@ public class TrainController : MonoBehaviour
         for (int i = 0; i < numOfCarts; i++)
         {
             // instantiate cart as child
-            GameObject cart = Instantiate(cartTypes[UnityEngine.Random.Range(0, 3)], cartParent.transform);
+            GameObject cart = Instantiate(cartTypes[GetRandomCart()].cartPrefab, cartParent.transform);
             TrainSelection selection = cart.GetComponent<TrainSelection>();
 
             // figure out position
@@ -176,7 +184,7 @@ public class TrainController : MonoBehaviour
         isArriving = true;
 
         text.text = trainID;
-    } 
+    }
 
     public void departTrain()
     {
@@ -241,8 +249,32 @@ public class TrainController : MonoBehaviour
             alertObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
         }
-        
 
+
+    }
+
+    private int GetRandomCart()
+    {
+        int totalWeight = 0;
+        foreach (CartType type in cartTypes)
+        {
+            totalWeight += type.weight;
+        }
+
+        int rand = UnityEngine.Random.Range(0, totalWeight);
+
+        for (int i = 0; i < cartTypes.Length; i++)
+        {
+            if (rand < cartTypes[i].weight)
+            {
+                return i;
+            }
+
+            rand -= cartTypes[i].weight;
+        }
+
+        // failsafe
+        return 0;
     }
 
 }
