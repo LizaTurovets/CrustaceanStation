@@ -151,7 +151,7 @@ public class Clock : MonoBehaviour
                 CheckTrains();
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(10f);
 
             // rotate clock hand
             yield return RotateHand();

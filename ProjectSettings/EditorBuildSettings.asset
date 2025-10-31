@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TrainClock.unity
     guid: fe4d628557eda42f483bc15e43f1d88f
+  - enabled: 1
+    path: Assets/Scenes/Temp.unity
+    guid: 87712502d46904e24a130ba9c2af8ccb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -39,7 +39,8 @@ public class CrabController : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
         kioskStartPos = new Vector3(-470, -500, 0);
-        kioskEndPos = new Vector3(-470, 140, 0);
+        kioskEndPos = new Vector3(-470, 115, 0);
+
         rectTransform.anchoredPosition = kioskStartPos;
 	}
 

@@ -1011,7 +1011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8408057287373222382, guid: d7bdf3a29fb49486486661bc31a0421b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 140
+      value: 115
       objectReference: {fileID: 0}
     - target: {fileID: 8408057287373222382, guid: d7bdf3a29fb49486486661bc31a0421b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1411,6 +1411,7 @@ MonoBehaviour:
   - {fileID: 1918681812830035428, guid: c2e9671eb65934b05b043731e91fdde1, type: 3}
   - {fileID: 1874859352200396753, guid: b447586ab45f14b339f3c4e147f9db3d, type: 3}
   - {fileID: 1874859352200396753, guid: d7bdf3a29fb49486486661bc31a0421b, type: 3}
+  - {fileID: 2732488424869484145, guid: 747c83d2286a84f86a418f4762e47085, type: 3}
   names:
   - Crusty Shawn
   - Craw Dad
@@ -1425,6 +1426,9 @@ MonoBehaviour:
   - Shromp
   - Hermie
   - Hermie 2 Electric Boogaloo
+  - Gramps
+  - Grandpa Shrimp
+  - Grandma Shrimp
   sprites:
   - {fileID: 21300000, guid: bedc34cef839042a4bf5d4101ee200a3, type: 3}
   - {fileID: 21300000, guid: c5d83dd39705c4911bfdcb127b4aea4f, type: 3}
@@ -1435,6 +1439,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7d27975897fb2444199cc2432224f37e, type: 3}
   - {fileID: 21300000, guid: bec719692de264bd08f098f45fcdc473, type: 3}
   - {fileID: 21300000, guid: 0292ddb48b1c04bab8af1885d27160cd, type: 3}
+  - {fileID: 21300000, guid: 0ab82ac55c1334a3fa15b4f4efdb5751, type: 3}
 --- !u!114 &728166980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1561,7 +1566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2091786938100019260, guid: 4a1d6a7989fe041db9b2e4ad96670d93, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 140
+      value: 115
       objectReference: {fileID: 0}
     - target: {fileID: 2091786938100019260, guid: 4a1d6a7989fe041db9b2e4ad96670d93, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
