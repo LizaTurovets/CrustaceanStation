@@ -1622,9 +1622,12 @@ MonoBehaviour:
   text: {fileID: 1875405971}
   cartParent: {fileID: 1035634101}
   cartTypes:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - cartPrefab: {fileID: 0}
+    weight: 0
+  - cartPrefab: {fileID: 0}
+    weight: 0
+  - cartPrefab: {fileID: 0}
+    weight: 0
   alertObject: {fileID: 280957715}
 --- !u!1 &457801352
 GameObject:
@@ -2287,7 +2290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e29f352e2be874a10856a0c1ce1b666e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
