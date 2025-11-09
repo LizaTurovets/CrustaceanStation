@@ -12,4 +12,14 @@ public class MenuButtons : MonoBehaviour
     {
         SceneManager.LoadScene("Temp");
     }
+
+    public void Settings()
+    {
+        SceneManager.LoadScene("Settings");
+    }
+
+    public void Credits()
+    {
+        SceneManager.LoadScene("Credits");
+    }
 }
