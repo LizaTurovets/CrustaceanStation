@@ -16,10 +16,17 @@ public class Ticket : MonoBehaviour
     [SerializeField] private RectTransform rectTransform;
     private ID id;
 
+
+    // SPRITES
+    [SerializeField] private Sprite[] ticketSprites;
+    [SerializeField] private Image ticketImg;
+    [SerializeField] private Image blurImg;
+
     public void SetName(string newName)
     {
         crabName = newName;
         nameText.text = crabName;
+        Debug.Log("name set: " + crabName);
     }
 
     public void SetTrainID(string newTrainID)
@@ -28,12 +35,12 @@ public class Ticket : MonoBehaviour
         trainIDText.text = trainID;
     }
 
-	public void SetID(ID newID)
-	{
+    public void SetID(ID newID)
+    {
         id = newID;
-	}
+    }
 
-	public string GetRandomTrainID()
+    public string GetRandomTrainID()
     {
         return letters[Random.Range(0, letters.Length)] + numbers[Random.Range(0, numbers.Length)].ToString();
     }
@@ -67,5 +74,24 @@ public class Ticket : MonoBehaviour
         rectTransform.SetAsLastSibling();
 
         id.PushBack();
+    }
+    
+    public void SetSprite(Cart.Type cartType)
+    {
+        if (cartType == Cart.Type.Economy)
+        {
+            ticketImg.sprite = ticketSprites[0];
+            blurImg.sprite = ticketSprites[0];
+        }
+        else if (cartType == Cart.Type.Standard)
+        {
+            ticketImg.sprite = ticketSprites[1];
+            blurImg.sprite = ticketSprites[1];
+        }
+        else if (cartType == Cart.Type.Deluxe)
+        {
+            ticketImg.sprite = ticketSprites[2];
+            blurImg.sprite = ticketSprites[2];
+        }
     }
 }
