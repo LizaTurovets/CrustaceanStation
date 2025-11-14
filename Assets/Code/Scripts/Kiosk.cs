@@ -98,12 +98,23 @@ public class Kiosk : MonoBehaviour
     {
         isOpen = true;
     }
+
+    public void CloseKiosk()
+    {
+        isOpen = false;
+        currentCrab.GetComponent<CrabController>().MakeDisappear();
+    }
+    
     private IEnumerator WaitAMoment()
     {
         yield return new WaitForSeconds(3f);
 
         Destroy(currentCrab);
-        SummonCrab();
+
+        if (isOpen)
+        {
+            SummonCrab();
+        }
     }
 
 }

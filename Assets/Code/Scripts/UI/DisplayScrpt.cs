@@ -4,20 +4,22 @@ using UnityEngine.SceneManagement;
 
 public class DisplayScrpt : MonoBehaviour
 {
-    private float speed = 16.0f;
-    private Vector3 offPos = new Vector3(0, -6.0f, -2);
-    private Vector3 onPos = new Vector3(0, 1.0f, -2);
+    [SerializeField] private float speed = 16.0f;
+    private Vector3 offPos = new Vector3(0, -907.0f, -2);
+    private Vector3 onPos = new Vector3(0, 0.0f, -2);
     private bool moving = false;
     // displayed is for animation purposes
     [SerializeField] private bool displayed;
     // pause the game when paused == true
     [SerializeField] private bool paused;
 
+    [SerializeField] private RectTransform rectTransform;
+
     void Start()
     {
         displayed = false;
         paused = false;
-        transform.position = offPos;
+        rectTransform.anchoredPosition = offPos;
     }
 
     // Update is called once per frame
@@ -30,29 +32,35 @@ public class DisplayScrpt : MonoBehaviour
             {
                 paused = true;
                 moving = true;
-            } 
-            
+            }
+
             // unpause
-            if (displayed)               
+            if (displayed)
             {
                 paused = false;
                 moving = true;
 
+                if (LevelManager.instance != null)
+                {
+                    LevelManager.instance.OnResume();
+                }
             }
             Debug.Log(paused);
         }
 
-        if (moving) 
+        if (moving)
         {
             // bring the screen down
             if (displayed)
             {
                 var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, offPos, step);
-                if (transform.position.y <= offPos.y || Mathf.Abs(transform.position.y - offPos.y) < 0.0001f)
+                rectTransform.anchoredPosition = Vector3.MoveTowards(rectTransform.anchoredPosition, offPos, step);
+                if (rectTransform.anchoredPosition.y <= offPos.y || Mathf.Abs(rectTransform.anchoredPosition.y - offPos.y) < 0.0001f)
                 {
                     moving = false;
                     displayed = false;
+
+                    // resume the clock/everything else when it's done moving
                 }
             }
 
@@ -60,11 +68,17 @@ public class DisplayScrpt : MonoBehaviour
             else if (!displayed)
             {
                 var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, onPos, step);
-                if (transform.position.y >= onPos.y || Mathf.Abs(transform.position.y - onPos.y) < 0.0001f)
+                rectTransform.anchoredPosition = Vector3.MoveTowards(rectTransform.anchoredPosition, onPos, step);
+                if (rectTransform.anchoredPosition.y >= onPos.y || Mathf.Abs(rectTransform.anchoredPosition.y - onPos.y) < 0.0001f)
                 {
                     moving = false;
                     displayed = true;
+
+                    // stop the clock! 
+                    if (LevelManager.instance != null)
+                    {
+                        LevelManager.instance.OnPause();
+                    }
                 }
             }
         }
@@ -73,17 +87,22 @@ public class DisplayScrpt : MonoBehaviour
     // clicking continue
     public void DisplayOff()
     {
-        if (displayed) 
-        { 
+        if (displayed)
+        {
             moving = true;
-            paused = false; 
+            paused = false;
         }
         Debug.Log(paused);
     }
 
 
-    public void Back2menu() 
+    public void Back2menu()
     {
         SceneManager.LoadScene("TitleScreen");
+    }
+
+    public void OnSettings()
+    {
+        //SceneManager.LoadScene("Settings");
     }
 }

@@ -41,8 +41,6 @@ public class Clock : MonoBehaviour
     private void Awake()
     {
         allTrains = new List<GameObject>[4];
-        currentTime = startTime;
-        StartCoroutine(TimeItself());
     }
 
     private void AddTrains()
@@ -136,6 +134,12 @@ public class Clock : MonoBehaviour
         }
     }
 
+    public void BeginDay()
+    {
+        currentTime = startTime;
+        StartCoroutine(TimeItself());
+    }
+
     // CLOCK ANIMATION
     private IEnumerator TimeItself()
     {
@@ -154,11 +158,21 @@ public class Clock : MonoBehaviour
                 CheckTrains();
             }
 
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(1f);
 
             // rotate clock hand
             yield return RotateHand();
             currentTime++;
+
+            if (currentTime == endTime)
+            {
+                kiosk.CloseKiosk();
+                LevelManager.instance.ShowStatsForTheDay();
+                foreach (TrainController train in currentTrains)
+                {
+                    train.departTrain();
+                }
+            }
         }
     }
 
@@ -192,7 +206,9 @@ public class Clock : MonoBehaviour
                     {
                         controller.AboutToDepartAlert();
                     }
+
                 }
+
             }
 
             foreach (int index in removeIndex)
@@ -217,7 +233,7 @@ public class Clock : MonoBehaviour
         }
 
         clockHand.transform.rotation = endRot;
-        
+
     }
 
     private IEnumerator WaitThenSummonCrabs()
