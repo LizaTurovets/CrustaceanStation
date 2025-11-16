@@ -18,6 +18,7 @@ public class ID : MonoBehaviour
     {
         crabName = newName;
         nameText.text = crabName;
+        Debug.Log("name set: " + crabName);
     }
 
     public void SetIDPhoto(Sprite newSprite)

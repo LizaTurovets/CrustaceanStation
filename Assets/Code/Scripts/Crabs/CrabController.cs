@@ -16,6 +16,7 @@ public class CrabController : MonoBehaviour
     private GameObject id;
     private CrabSelector crabSelector;
     private string trainID = "";
+    private Cart.Type cartType;
 
 
     // VALIDITY
@@ -24,11 +25,14 @@ public class CrabController : MonoBehaviour
 
     //MOVEMENT
     private bool isMoving = false;
-    [SerializeField] private float speed = 50f;
+    private float speed = 750f;
     private bool approachingKiosk = false;
     private bool leavingKiosk = false;
     private Vector3 kioskEndPos; // where we want the crab to be when it's at the kiosk
     private Vector3 kioskStartPos; // where we want the crab to pop out from when it approaches the kiosk
+    private Vector3 currentVelocity;
+
+    private bool presented = false;
 
 
     //MISC
@@ -41,7 +45,18 @@ public class CrabController : MonoBehaviour
         kioskStartPos = new Vector3(-470, -500, 0);
         kioskEndPos = new Vector3(-470, 115, 0);
 
+        if (crabInfo.type == CrabInfo.CrabType.scopeCreep)
+        {
+            kioskEndPos.y = 99;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.catfish)
+        {
+            kioskEndPos.y = 49;
+        }
+
         rectTransform.anchoredPosition = kioskStartPos;
+
+        crabInfo.crabName = CrabNameGenerator.instance.GetNameByType(crabInfo.type);
 	}
 
     public void SetCanvas(Canvas newCanvas)
@@ -78,7 +93,7 @@ public class CrabController : MonoBehaviour
         Sprite crabPhoto = crabInfo.sprite;
         if (Random.Range(0, 10) > 8)                    // RANDOM NAME
         {
-            crabName = crabSelector.ChooseName();
+            crabName = CrabNameGenerator.instance.GetAnyName();
             if (crabName != crabInfo.crabName)
             {
                 isValid = false;
@@ -115,6 +130,7 @@ public class CrabController : MonoBehaviour
 
         id.GetComponent<ID>().SetIDPhoto(crabPhoto);
 
+        // TRAIN ID FORGERY (OR NOT)
         if (Random.Range(0, 10) > 8)                                            // MORE FORGERY! - TRAIN ID
         {
             trainID = ticket.GetComponent<Ticket>().GetRandomTrainID();
@@ -126,6 +142,9 @@ public class CrabController : MonoBehaviour
         }
         ticket.GetComponent<Ticket>().SetTrainID(trainID);
 
+        // TRAIN CART TYPE FORGERY (OR NOT)
+        cartType = clock.GetRandomCurrentCartType();
+        ticket.GetComponent<Ticket>().SetSprite(cartType);
     }
 
     public string GetTrainID()
@@ -133,7 +152,10 @@ public class CrabController : MonoBehaviour
         return trainID;
     }
 
-
+    public Cart.Type GetTicketType()
+    {
+        return cartType;
+    }
 
     public bool IsValid()
     {
@@ -145,16 +167,15 @@ public class CrabController : MonoBehaviour
         Destroy(id);
     }
 
-    [ContextMenu("MakeAppear")]
     public void MakeAppear()
     {
         isMoving = true;
         approachingKiosk = true;
         leavingKiosk = false;
     }
-    [ContextMenu("MakeDisappear")]
     public void MakeDisappear()
     {
+        RemoveTicketAndID();
         isMoving = true;
         approachingKiosk = false;
         leavingKiosk = true;
@@ -166,31 +187,33 @@ public class CrabController : MonoBehaviour
         {
             if (approachingKiosk)
             {
-                var step = speed * Time.deltaTime;
-                rectTransform.anchoredPosition = Vector3.MoveTowards(rectTransform.anchoredPosition, kioskEndPos, step);
+                rectTransform.anchoredPosition = Vector3.SmoothDamp(rectTransform.anchoredPosition, kioskEndPos, ref currentVelocity, 0.25f);
 
-                if (rectTransform.anchoredPosition.y >= kioskEndPos.y)
+                if (Vector2.Distance(rectTransform.anchoredPosition, kioskEndPos) < 10f && !presented)
+                {
+                    presented = true;
+                    PresentTicketAndID();
+                }
+                else if (Vector2.Distance(rectTransform.anchoredPosition, kioskEndPos) < 0.1f)
                 {
                     approachingKiosk = false;
                     isMoving = false;
                     rectTransform.anchoredPosition = kioskEndPos;
-                    PresentTicketAndID();
+
                 }
                 
             }
             else if (leavingKiosk)
             {
-                var step = speed * Time.deltaTime;
-                rectTransform.anchoredPosition = Vector3.MoveTowards(rectTransform.anchoredPosition, kioskStartPos, step);
+                rectTransform.anchoredPosition = Vector3.SmoothDamp(rectTransform.anchoredPosition, kioskStartPos, ref currentVelocity, 0.4f);
 
-                if (rectTransform.anchoredPosition.y <= kioskStartPos.y)
+                if (Vector2.Distance(rectTransform.anchoredPosition, kioskStartPos) < 0.1f)
                 {
                     leavingKiosk = false;
                     isMoving = false;
                     rectTransform.anchoredPosition = kioskStartPos;
-                    RemoveTicketAndID();
                 }
-                
+
             }
 
 

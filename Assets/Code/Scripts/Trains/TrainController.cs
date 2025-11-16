@@ -19,6 +19,7 @@ public class TrainController : MonoBehaviour
     private Vector3 startingPosDepart; // also endPosArrive
     private Vector3 endPosDepart; // where the train goes to be completely offscreen
     private float speed = 600.0f;
+    private Vector3 currentVelocity;
 
     // IDS and INFO
     private Train trainInfo;
@@ -66,6 +67,18 @@ public class TrainController : MonoBehaviour
         Init();
     }
 
+    public bool IsTrainFull()
+    {
+        foreach (TrainSelection cart in trainSelections)
+        {
+            if (!cart.isItFull())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     public bool IsStartTime0()
     {
         return trainInfo.arrivalTimeHour == 0;
@@ -130,7 +143,7 @@ public class TrainController : MonoBehaviour
 
         startingPosArrive = new Vector3(x, 830, 0);
         startingPosDepart = new Vector3(x, -250, 0);
-        endPosDepart = new Vector3(x, -1280, 0);
+        endPosDepart = new Vector3(x, -2426, 0);
         trainTransform.anchoredPosition = startingPosArrive;
 
         trainID = trainIDLetters[UnityEngine.Random.Range(0, trainIDLetters.Length)] + trainInfo.trainID.ToString();
@@ -196,6 +209,11 @@ public class TrainController : MonoBehaviour
         // move train offscreen (down)
         isMoving = true;
         isDeparting = true;
+
+        foreach (TrainSelection ts in trainSelections)
+        {
+            ts.SetThisClickable(false);
+        }
     }
 
     public void AddToCrabsOnTrain(int ticketCost)
@@ -211,10 +229,9 @@ public class TrainController : MonoBehaviour
             if (isArriving)
             {
                 // move train down from offscreen
-                var step = speed * Time.deltaTime;
-                trainTransform.anchoredPosition = Vector3.MoveTowards(trainTransform.anchoredPosition, startingPosDepart, step);
+                trainTransform.anchoredPosition = Vector3.SmoothDamp(trainTransform.anchoredPosition, startingPosDepart, ref currentVelocity, 0.5f);
 
-                if (trainTransform.anchoredPosition.y <= startingPosDepart.y)
+                if (Vector2.Distance(trainTransform.anchoredPosition, startingPosDepart) < 0.1f)
                 {
                     isArriving = false;
                     isMoving = false;
@@ -225,10 +242,9 @@ public class TrainController : MonoBehaviour
                 isAlerting = false;
 
                 // move train down from onscreen
-                var step = speed * Time.deltaTime;
-                trainTransform.anchoredPosition = Vector3.MoveTowards(trainTransform.anchoredPosition, endPosDepart, step);
+                trainTransform.anchoredPosition = Vector3.SmoothDamp(trainTransform.anchoredPosition, endPosDepart, ref currentVelocity, 0.5f);
 
-                if (trainTransform.anchoredPosition.y <= endPosDepart.y)
+                if (Vector2.Distance(trainTransform.anchoredPosition, endPosDepart) < 0.1f)
                 {
                     isDeparting = false;
                     isMoving = false;
@@ -253,7 +269,7 @@ public class TrainController : MonoBehaviour
 
     }
 
-    private int GetRandomCart()
+    private int GetRandomCart() // to get a random cart type when instantiating the train
     {
         int totalWeight = 0;
         foreach (CartType type in cartTypes)
@@ -277,4 +293,24 @@ public class TrainController : MonoBehaviour
         return 0;
     }
 
+    public Cart.Type GetRandomCartType() // get a random cart type when instantiating the ticket
+    {
+        List<TrainSelection> notFilledCarts = new List<TrainSelection>();
+        foreach (TrainSelection train in trainSelections)
+        {
+            if (!train.isItFull())
+            {
+                notFilledCarts.Add(train);
+            }
+        }
+
+        if (notFilledCarts.Count == 0)
+        {
+            return trainSelections[UnityEngine.Random.Range(0, trainSelections.Count)].GetCartType();
+        }
+        else
+        {
+            return notFilledCarts[UnityEngine.Random.Range(0, notFilledCarts.Count)].GetCartType();
+        }
+    }
 }
