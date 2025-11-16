@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,21 +22,35 @@ public class Shop : MonoBehaviour
     [SerializeField] private TextMeshProUGUI cartPriceText;
 
     private int shopMenu; // 1 for decor/upgrade, 2 for decor menu, 3 for upgrade menu
-    public GameObject ShopFns, Upgrades; 
+    public GameObject ShopFns, Upgrades;
+
+    [SerializeField] private bool debug;
 
     private void Awake()
     {
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
         // maybe a multiplier for each level of upgrade?
-        trackPrice = 100;
-        crabPrice = 100;
-        cartPrice = 100;
     }
     void Start()
     {
+        if (debug) // debug
+        {
+            PlayerPrefs.SetInt("coins", 2000);
+            PlayerPrefs.SetInt("numTracks", 0);
+            PlayerPrefs.SetInt("crabDropRate", 0);
+            PlayerPrefs.SetInt("cartQuality", 0);
+        }
         shopMenu = 1;
         ShopFns.SetActive(true);
         Upgrades.SetActive(false);
+        coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
+
+        numTracks = PlayerPrefs.GetInt("numTracks");
+        crabDropRate = PlayerPrefs.GetInt("crabDropRate");
+        cartQuality = PlayerPrefs.GetInt("cartQuality");
+        trackPrice = (int)(100 * (Mathf.Pow(2f, (float)numTracks)));
+        crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
+        cartPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
     }
 
     // switch to upgrade menu
@@ -84,36 +99,42 @@ public class Shop : MonoBehaviour
     public void Track()
     {
         //int coins = 2000;
-        if (PlayerPrefs.GetInt("coins") >= trackPrice && numTracks < 4) // max # of tracks
+        if (PlayerPrefs.GetInt("coins") >= trackPrice && numTracks < 3) // max # of tracks
         {
             Purchase(trackPrice);
             numTracks++;
             // update price and text here?
-            trackPriceText.text = (trackPrice * 2).ToString();
-            Debug.Log(numTracks);
+            PlayerPrefs.SetInt("numTracks", numTracks);
+            trackPrice = (int)(100 * (Mathf.Pow(2f, (float)numTracks)));
+            trackPriceText.text = (trackPrice).ToString();
+            //Debug.Log(numTracks);
         }
     }
 
     public void Crabs()
     {
-        if (PlayerPrefs.GetInt("coins") >= crabPrice && crabDropRate < 6) // cap???
+        if (PlayerPrefs.GetInt("coins") >= crabPrice && crabDropRate < 3) // cap???
         {
             Purchase(crabPrice);
             crabDropRate++;
             // update price and text here?
-            crabPriceText.text = (crabPrice * 2).ToString();
-            Debug.Log(crabDropRate);
+            PlayerPrefs.SetInt("crabDropRate", crabDropRate);
+            crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
+            crabPriceText.text = (crabPrice).ToString();
+            //Debug.Log(crabDropRate);
         }
     }
     public void Carts()
     {
-        if (PlayerPrefs.GetInt("coins") >= cartPrice  && cartQuality < 2) // 0 is standard, 1 is economy, 2 is deluxe
+        if (PlayerPrefs.GetInt("coins") >= cartPrice  && cartQuality < 2) // 0 is economy, 1 is standard, 2 is deluxe
         {
             Purchase(cartPrice);
             cartQuality++;
             // update price and text here?
-            cartPriceText.text = (cartPrice * 2).ToString();
-            Debug.Log(cartPrice);
+            PlayerPrefs.SetInt("cartQuality", cartQuality);
+            cartPrice = (int)(100 * (Mathf.Pow(2f, (float)cartQuality)));
+            cartPriceText.text = (cartPrice).ToString();
+            //Debug.Log(cartPrice);
         }
     }
     public void Purchase(int price)
