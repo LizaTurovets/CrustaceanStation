@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
     // Player goals for the day
     private bool isRating = false;
     private bool isCrabCount = false;
+    private bool dayStarted = false;
 
     private void Awake()
     {
@@ -47,7 +48,6 @@ public class LevelManager : MonoBehaviour
         // stop clock & crabs & trains
         Time.timeScale = 0f;
 
-        // show goal on pause screen?
     }
 
     public void OnResume()
@@ -63,6 +63,8 @@ public class LevelManager : MonoBehaviour
     {
         // start the clock
         clock.BeginDay();
+
+        dayStarted = true;
     }
 
     public void ShowStatsForTheDay()
@@ -70,6 +72,8 @@ public class LevelManager : MonoBehaviour
         // show prefab
         transparentOverlay.SetActive(true);
         summaryMenu.SetActive(true);
+
+        dayStarted = false;
     }
 
     public void OnShop()
@@ -119,6 +123,11 @@ public class LevelManager : MonoBehaviour
         transparentOverlay.SetActive(false);
 
         OnStartLevel();
+    }
+
+    public bool HasStarted()
+    {
+        return dayStarted;
     }
 
 }

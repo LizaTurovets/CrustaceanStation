@@ -13,7 +13,6 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private GameObject canvas;
 
     [SerializeField] private TextMeshProUGUI coinCountText;
-    [SerializeField] private Slider ratingsSlider;
     private bool isOpen = false; 
 
     private int crabsToday = 0;
@@ -21,11 +20,12 @@ public class Kiosk : MonoBehaviour
 
     private int wrong = 0;
     private int total = 0;
-    private float rating = 1;
+
+    [SerializeField] private RatingGoal ratingGoal;
+    [SerializeField] private CrabCountGoal crabCountGoal;
 
     private void Awake()
     {
-        ratingsSlider.value = 1;
         crabSelector = GetComponent<CrabSelector>();
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
@@ -99,7 +99,7 @@ public class Kiosk : MonoBehaviour
 
     public void GivePlayerCoins(int newCoins)
     {
-        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + (int)(newCoins * rating));
+        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + (int)(newCoins * ratingGoal.GetRating()));
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
 
@@ -116,8 +116,7 @@ public class Kiosk : MonoBehaviour
 
     private void UpdateRating()
     {
-        rating = (total - wrong) / (float)total;
-        ratingsSlider.value = rating;
+        ratingGoal.UpdateRating((total - wrong) / (float)total);
     }
 
     public void OpenKiosk()

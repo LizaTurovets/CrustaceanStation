@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 public class DisplayScrpt : MonoBehaviour
 {
     [SerializeField] private float speed = 16.0f;
-    private Vector3 offPos = new Vector3(0, -907.0f, -2);
-    private Vector3 onPos = new Vector3(0, 0.0f, -2);
+    private Vector3 offPos = new Vector3(0, -1208.0f, -2);
+    private Vector3 onPos = new Vector3(0, -0.91f, -2);
     private bool moving = false;
     // displayed is for animation purposes
     [SerializeField] private bool displayed;
@@ -25,7 +25,7 @@ public class DisplayScrpt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && LevelManager.instance.HasStarted())
         {
             // pause
             if (!displayed)
