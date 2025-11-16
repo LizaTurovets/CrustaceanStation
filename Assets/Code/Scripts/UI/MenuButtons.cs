@@ -15,11 +15,11 @@ public class MenuButtons : MonoBehaviour
 
     public void Settings()
     {
-        SceneManager.LoadScene("Settings");
+        //SceneManager.LoadScene("Settings");
     }
 
     public void Credits()
     {
-        SceneManager.LoadScene("Credits");
+        //SceneManager.LoadScene("Credits");
     }
 }
