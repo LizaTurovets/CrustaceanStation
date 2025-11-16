@@ -9,15 +9,22 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private Clock clock;
 
     [SerializeField] private GameObject crabParentObject; // in scene hierarchy: canvas > crabs
+    [SerializeField] private GameObject ticketParentObject;
     [SerializeField] private GameObject canvas;
 
     [SerializeField] private TextMeshProUGUI coinCountText;
-
+    [SerializeField] private Slider ratingsSlider;
     private bool isOpen = false;
+
+    private int crabsToday = 0;
+    private int wrongCrabs = 0;
+    private float rating = 1;
 
     private void Awake()
     {
+        ratingsSlider.value = 1;
         crabSelector = GetComponent<CrabSelector>();
+        coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
 
     public void SummonCrab()
@@ -26,6 +33,7 @@ public class Kiosk : MonoBehaviour
         currentCrab.GetComponent<CrabController>().SetCanvas(canvas.GetComponent<Canvas>());
         currentCrab.GetComponent<CrabController>().SetCrabSelector(crabSelector);
         currentCrab.GetComponent<CrabController>().SetClock(clock);
+        currentCrab.GetComponent<CrabController>().SetTicketAndIDParentObject(ticketParentObject);
         currentCrab.GetComponent<CrabController>().MakeAppear();
     }
     public void OnApprove()
@@ -37,20 +45,12 @@ public class Kiosk : MonoBehaviour
         {
             trainExists = true;
         }
-            
 
-        if (currentCrab.GetComponent<CrabController>().IsValid() && trainExists)               // COMPLETELY VALID
-        {
-            //currentCrab.GetComponent<CrabController>().MakeDisappear();
-            // TODO: Logic for selecting train
-            clock.SetTrainsClickable(true);
+        clock.SetTrainsClickable(true);
 
-            //wait a moment
-            //StartCoroutine(WaitAMoment());
-        }
-        else                                                                    // FORGERY!
+        if (!currentCrab.GetComponent<CrabController>().IsValid() || !trainExists)
         {
-            // consequences?
+            wrongCrabs++;
         }
         
     }
@@ -60,35 +60,38 @@ public class Kiosk : MonoBehaviour
         if (!isOpen) return;
 
         bool trainExists = false;
-        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
+        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID()))
         {
             trainExists = true;
         }
 
-        if (!currentCrab.GetComponent<CrabController>().IsValid() || !trainExists)
+        if (currentCrab.GetComponent<CrabController>().IsValid() && trainExists)
         {
-            currentCrab.GetComponent<CrabController>().MakeDisappear();
-            // TODO: crab make sad sound
-
-            //wait a moment
-            StartCoroutine(WaitAMoment());
+            wrongCrabs++;
         }
-        else
-        {
-            // consequences
-        }
+        
+        DisappearCrab();
     }
 
     public void GivePlayerCoins(int newCoins)
     {
-        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + newCoins);
+        PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") + (int)(newCoins * rating));
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
     }
 
     public void DisappearCrab()
     {
+        UpdateRating();
+
         currentCrab.GetComponent<CrabController>().MakeDisappear();
         StartCoroutine(WaitAMoment());
+    }
+
+    private void UpdateRating()
+    {
+        crabsToday++;
+        rating = (crabsToday - wrongCrabs) / (float)crabsToday;
+        ratingsSlider.value = rating;
     }
 
     public void OpenKiosk()

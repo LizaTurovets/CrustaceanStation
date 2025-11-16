@@ -919,7 +919,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 9a7bce4d-ad68-4b39-90cd-e1da3d77a452
   framebufferDepthMemorylessMode: 0
@@ -935,3 +935,4 @@ PlayerSettings:
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
+  d3d12DeviceFilterListAsset: {fileID: 0}

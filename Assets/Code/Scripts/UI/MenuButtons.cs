@@ -10,6 +10,16 @@ public class MenuButtons : MonoBehaviour
 
     public void startGame()
     {
-        SceneManager.LoadScene("TrainClock");
+        SceneManager.LoadScene("Temp");
+    }
+
+    public void Settings()
+    {
+        SceneManager.LoadScene("Settings");
+    }
+
+    public void Credits()
+    {
+        SceneManager.LoadScene("Credits");
     }
 }
