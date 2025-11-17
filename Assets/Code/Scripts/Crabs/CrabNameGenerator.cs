@@ -49,6 +49,8 @@ public class CrabNameGenerator : MonoBehaviour
     {
         "sc0p3cr33p",
         "0101001101000011",
+        "sc0p3cr33p0101001101000011",
+        "s010100110p301010011r33p"
     };
     private List<string> coquette = new List<string>
     {

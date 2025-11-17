@@ -11,7 +11,9 @@ public class LevelManager : MonoBehaviour
     // prefabs
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject goalRating;
+    [SerializeField] private RatingGoal ratingGoalScript;
     [SerializeField] private GameObject goalCrabCount;
+    [SerializeField] private CrabCountGoal crabCountGoalScript;
     [SerializeField] private GameObject summaryMenu;
 
     // UI background 
@@ -101,11 +103,13 @@ public class LevelManager : MonoBehaviour
         {
             isRating = true;
             goalRating.SetActive(true);
+            ratingGoalScript.SetGoalActive();
         }
         else
         {
             isCrabCount = true;
             goalCrabCount.SetActive(true);
+            crabCountGoalScript.SetGoalActive();
         }
 
         yield return new WaitForSeconds(3.5f);
