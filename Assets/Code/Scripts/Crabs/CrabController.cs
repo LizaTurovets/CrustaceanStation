@@ -47,11 +47,11 @@ public class CrabController : MonoBehaviour
 
         if (crabInfo.type == CrabInfo.CrabType.scopeCreep)
         {
-            kioskEndPos.y = 99;
+            kioskEndPos.y = 31;
         }
         else if (crabInfo.type == CrabInfo.CrabType.catfish)
         {
-            kioskEndPos.y = 49;
+            kioskEndPos.y = -38;
         }
 
         rectTransform.anchoredPosition = kioskStartPos;
