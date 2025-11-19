@@ -8,9 +8,12 @@ public class CrabCountGoal : MonoBehaviour
 
     private void Awake()
     {
+        goalText.text = "";
+    }
+
+    public void SetGoalActive()
+    {
         goalCount = Random.Range(20, 40);
         goalText.text = goalCount.ToString();
     }
-
-    
 }

@@ -43,15 +43,15 @@ public class CrabController : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
         kioskStartPos = new Vector3(-470, -500, 0);
-        kioskEndPos = new Vector3(-470, 115, 0);
+        kioskEndPos = new Vector3(-470, 15, 0);
 
         if (crabInfo.type == CrabInfo.CrabType.scopeCreep)
         {
-            kioskEndPos.y = 99;
+            kioskEndPos.y = 31;
         }
         else if (crabInfo.type == CrabInfo.CrabType.catfish)
         {
-            kioskEndPos.y = 49;
+            kioskEndPos.y = -38;
         }
 
         rectTransform.anchoredPosition = kioskStartPos;

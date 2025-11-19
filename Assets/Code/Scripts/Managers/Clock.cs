@@ -158,16 +158,14 @@ public class Clock : MonoBehaviour
 
                 yield return WaitThenSummonCrabs();
             }
-            else
-            {
-                CheckTrains();
-            }
 
             yield return new WaitForSeconds(15f);            // CHANGES HOW FAST THE CLOCK MOVES
 
             // rotate clock hand
             yield return RotateHand();
             currentTime++;
+
+            CheckTrains();
 
             if (currentTime == endTime)
             {
