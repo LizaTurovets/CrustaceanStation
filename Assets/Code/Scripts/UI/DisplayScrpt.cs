@@ -14,6 +14,7 @@ public class DisplayScrpt : MonoBehaviour
     [SerializeField] private bool paused;
 
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private GameObject settings;
 
     void Start()
     {
@@ -98,11 +99,12 @@ public class DisplayScrpt : MonoBehaviour
 
     public void Back2menu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("TitleScreen");
     }
 
     public void OnSettings()
     {
-        //SceneManager.LoadScene("Settings");
+        settings.SetActive(true);
     }
 }

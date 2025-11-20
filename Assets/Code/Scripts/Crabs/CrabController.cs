@@ -43,7 +43,7 @@ public class CrabController : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
         kioskStartPos = new Vector3(-470, -500, 0);
-        kioskEndPos = new Vector3(-470, 15, 0);
+        kioskEndPos = new Vector3(-470, 89, 0); 
 
         if (crabInfo.type == CrabInfo.CrabType.scopeCreep)
         {
@@ -51,7 +51,27 @@ public class CrabController : MonoBehaviour
         }
         else if (crabInfo.type == CrabInfo.CrabType.catfish)
         {
-            kioskEndPos.y = -38;
+            kioskEndPos.y = 45.8f;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.horseshoe)
+        {
+            kioskEndPos.y = 129;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.isopod)
+        {
+            kioskEndPos.y = 71;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.seamonkeys)
+        {
+            kioskEndPos.y = 111;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.ittybitty)
+        {
+            kioskEndPos.y = 115;
+        }
+        else if (crabInfo.type == CrabInfo.CrabType.isopodTiny || crabInfo.type == CrabInfo.CrabType.hermit)
+        {
+            kioskEndPos.y = 102;
         }
 
         rectTransform.anchoredPosition = kioskStartPos;

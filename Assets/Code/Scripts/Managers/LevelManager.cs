@@ -1,14 +1,18 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance { get; private set; }
 
+    [Header("Main")]
     [SerializeField] private Clock clock;
+    [SerializeField] private Kiosk kiosk;
 
     // prefabs
+    [Header("Goals & Summary")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject goalRating;
     [SerializeField] private RatingGoal ratingGoalScript;
@@ -16,8 +20,13 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private CrabCountGoal crabCountGoalScript;
     [SerializeField] private GameObject summaryMenu;
 
+    [Header("Track Upgrade")]
+    [SerializeField] private GameObject[] tracks;
+
     // UI background 
+    [Header("Other")]
     [SerializeField] private GameObject transparentOverlay;
+    [SerializeField] private AudioManager audioManager;
 
     // Player goals for the day
     private bool isRating = false;
@@ -38,6 +47,11 @@ public class LevelManager : MonoBehaviour
         goalRating.SetActive(false);
         goalCrabCount.SetActive(false);
         summaryMenu.SetActive(false);
+    }
+
+    public void Start()
+    {
+        ActivateUpgrades();
 
         StartCoroutine(ShowGoalForTheDay());
     }
@@ -49,6 +63,7 @@ public class LevelManager : MonoBehaviour
 
         // stop clock & crabs & trains
         Time.timeScale = 0f;
+        audioManager.Play();
 
     }
 
@@ -74,6 +89,8 @@ public class LevelManager : MonoBehaviour
         // show prefab
         transparentOverlay.SetActive(true);
         summaryMenu.SetActive(true);
+        summaryMenu.GetComponent<Summary>().SetRating(ratingGoalScript.GetRating());
+        summaryMenu.GetComponent<Summary>().SetCrabsProcessed(kiosk.GetTotalCrabs());
 
         dayStarted = false;
     }
@@ -132,6 +149,36 @@ public class LevelManager : MonoBehaviour
     public bool HasStarted()
     {
         return dayStarted;
+    }
+
+    private void ActivateUpgrades()
+    {
+        int trackCount = PlayerPrefs.GetInt("numTracks"); // starts at 0, so need to add one when updating track num in clock
+        int crabRate = PlayerPrefs.GetInt("crabDropRate");
+
+        // activate tracks
+        for (int i = 0; i < trackCount; i++)
+        {
+            tracks[i].SetActive(true);
+        }
+
+        // update train controllers
+        clock.UpdateNumTracks(trackCount + 1);
+
+
+        // TODO : CRAB UPGRADE
+
+    }
+
+    public int GetCartQuality()
+    {
+        return PlayerPrefs.GetInt("cartQuality");
+    }
+
+    [ContextMenu("Reset Progress")]
+    public void Reset()
+    {
+        PlayerPrefs.DeleteAll();
     }
 
 }

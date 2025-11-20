@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AudioSlider : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class AudioSlider : MonoBehaviour
     [SerializeField]
     private AudioMixMode MixMode;
 
+    [SerializeField] private Slider slider;
+
+    private void Awake()
+    {
+        slider.value = PlayerPrefs.GetFloat("Volume");
+    }
     private void Start()
     {
         Mixer.SetFloat("Volume", Mathf.Log10(PlayerPrefs.GetFloat("Volume", 1) * 20));

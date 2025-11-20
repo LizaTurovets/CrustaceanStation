@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MenuButtons : MonoBehaviour
 {
+    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject backgroundPanel;
     public void quitGame()
     {
         Debug.Log("Quit!");
@@ -16,6 +18,8 @@ public class MenuButtons : MonoBehaviour
     public void Settings()
     {
         //SceneManager.LoadScene("Settings");
+        settingsPanel.SetActive(true);
+        backgroundPanel.SetActive(true);
     }
 
     public void Credits()

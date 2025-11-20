@@ -142,7 +142,7 @@ public class TrainController : MonoBehaviour
         }
 
         startingPosArrive = new Vector3(x, 830, 0);
-        startingPosDepart = new Vector3(x, -250, 0);
+        startingPosDepart = new Vector3(x, -265.99f, 0);
         endPosDepart = new Vector3(x, -2426, 0);
         trainTransform.anchoredPosition = startingPosArrive;
 
@@ -271,10 +271,13 @@ public class TrainController : MonoBehaviour
 
     private int GetRandomCart() // to get a random cart type when instantiating the train
     {
+        // TODO : ADD CART UPGRADE STUFF HERE
+        int maxCartQuality = LevelManager.instance.GetCartQuality() + 1;
         int totalWeight = 0;
-        foreach (CartType type in cartTypes)
+        //for (CartType type in cartTypes)
+        for (int i = 0; i < maxCartQuality; i++)
         {
-            totalWeight += type.weight;
+            totalWeight += cartTypes[i].weight;
         }
 
         int rand = UnityEngine.Random.Range(0, totalWeight);

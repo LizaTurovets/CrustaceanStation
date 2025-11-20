@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -20, y: 678}
+  m_AnchoredPosition: {x: -20, y: 708}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3966052772860866247
@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280101751
-  m_fontColor: {r: 0.46666667, g: 0.16862746, b: 0.11372549, a: 1}
+    rgba: 4281545523
+  m_fontColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -238,7 +238,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1022581946, guid: f43ff3b0afaee48ceb7736a991730b79, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 444880a2e1ce04f3283111736c5d3a0d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -338,12 +338,12 @@ MonoBehaviour:
   text: {fileID: 6671870268166931842}
   cartParent: {fileID: 5362420082589631693}
   cartTypes:
-  - cartPrefab: {fileID: 8972088384346103965, guid: adbbfa6e634b94f8a8c2370a423a0776, type: 3}
-    weight: 5
-  - cartPrefab: {fileID: 1984475248551268759, guid: 32a69e655c2e943a7bba0be97a72365a, type: 3}
-    weight: 10
   - cartPrefab: {fileID: 9032537571525134767, guid: 35539ffabe5254e88b4eaebffa3e8596, type: 3}
     weight: 15
+  - cartPrefab: {fileID: 1984475248551268759, guid: 32a69e655c2e943a7bba0be97a72365a, type: 3}
+    weight: 10
+  - cartPrefab: {fileID: 8972088384346103965, guid: adbbfa6e634b94f8a8c2370a423a0776, type: 3}
+    weight: 5
   alertObject: {fileID: 1119015504978458765}
 --- !u!1 &8862759743973708597
 GameObject:

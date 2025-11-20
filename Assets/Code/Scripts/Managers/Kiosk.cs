@@ -13,11 +13,9 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private GameObject canvas;
 
     [SerializeField] private TextMeshProUGUI coinCountText;
-    private bool isOpen = false; 
+    private bool isOpen = false;
 
     private int crabsToday = 0;
-    private int wrongCrabs = 0;
-
     private int wrong = 0;
     private int total = 0;
 
@@ -46,7 +44,7 @@ public class Kiosk : MonoBehaviour
         if (!isOpen) return;
 
         bool trainExists = false;
-        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID())) 
+        if (clock.CheckTrainIDValidity(currentCrab.GetComponent<CrabController>().GetTrainID()))
         {
             trainExists = true;
         }
@@ -58,7 +56,7 @@ public class Kiosk : MonoBehaviour
             wrong++;
         }
     }
-     
+
     public void OnReject()
     {
         if (!isOpen) return;
@@ -130,7 +128,7 @@ public class Kiosk : MonoBehaviour
         isOpen = false;
         currentCrab.GetComponent<CrabController>().MakeDisappear();
     }
-    
+
     private IEnumerator WaitAMoment()
     {
         yield return new WaitForSeconds(2f);
@@ -141,6 +139,11 @@ public class Kiosk : MonoBehaviour
         {
             SummonCrab();
         }
+    }
+
+    public int GetTotalCrabs()
+    {
+        return crabsToday;
     }
 
 }

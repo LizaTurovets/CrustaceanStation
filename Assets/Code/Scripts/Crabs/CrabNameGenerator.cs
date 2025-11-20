@@ -25,6 +25,11 @@ public class CrabNameGenerator : MonoBehaviour
         "Portia",
         "Depo",
         "Honshoo",
+        "Cragglin",
+        "Clay",
+        "Dringle",
+        "Lilik"
+
     };
     private List<string> catfish = new List<string>
     {
@@ -35,7 +40,8 @@ public class CrabNameGenerator : MonoBehaviour
         "Charlie",
         "Smudge",
         "Calypso",
-        "Chester"
+        "Chester",
+        "Clay"
     };
     private List<string> horseshoe = new List<string>
     {
@@ -43,7 +49,8 @@ public class CrabNameGenerator : MonoBehaviour
         "Isobelle",
         "Sheldon",
         "Limul",
-        "Ancient Being"
+        "Ancient Being",
+        "Clay"
     };
     private List<string> scopeCreep = new List<string>
     {
@@ -62,7 +69,8 @@ public class CrabNameGenerator : MonoBehaviour
         "Calliope",
         "Margot",
         "Clawdette",
-        "Odette"
+        "Odette",
+        "Luna"
     };
     private List<string> crab = new List<string>
     {
@@ -121,6 +129,40 @@ public class CrabNameGenerator : MonoBehaviour
         "Mimimimimi"
     };
 
+    private List<string> isopod = new List<string>
+    {
+        "Iso",
+        "Isobelle",
+        "Sheldon",
+        "Limul",
+        "Molt",
+        "Clay"
+    };
+
+    private List<string> tall = new List<string>
+    {
+        "Shelly",
+        "Molt",
+        "Sheldon",
+        "Crabster",
+        "Taxi Crab",
+        "Clawdette",
+        "Crusty Shawn",
+        "Crabstopher"
+    };
+
+    private List<string> mustache = new List<string>
+    {
+        "Shelly",
+        "Molt",
+        "Sheldon",
+        "Crabster",
+        "Taxi Crab",
+        "Clawdette",
+        "Crusty Shawn",
+        "Crabstopher"
+    };
+
     private List<string> allNames;
     private void Awake()
     {
@@ -140,47 +182,62 @@ public class CrabNameGenerator : MonoBehaviour
                           .Concat(crab)
                           .Concat(shrimp)
                           .Concat(lobster)
-                          .Concat(hermit).ToList();
+                          .Concat(hermit)
+                          .Concat(isopod)
+                          .Concat(tall)
+                          .Concat(mustache).ToList();
     }
 
     public string GetNameByType(CrabInfo.CrabType type)
     {
 
-        if (type == CrabInfo.CrabType.catfish && Random.Range(0, 3) == 2)
+        if (type == CrabInfo.CrabType.catfish && Random.Range(0, 3) <= 2)
         {
             return catfish[Random.Range(0, catfish.Count)];
         }
-        else if (type == CrabInfo.CrabType.horseshoe && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.horseshoe && Random.Range(0, 3) <= 2)
         {
             return horseshoe[Random.Range(0, horseshoe.Count)];
         }
-        else if (type == CrabInfo.CrabType.scopeCreep && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.scopeCreep && Random.Range(0, 3) <= 2)
         {
             return scopeCreep[Random.Range(0, scopeCreep.Count)];
         }
-        else if (type == CrabInfo.CrabType.coquette && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.coquette && Random.Range(0, 3) <= 2)
         {
             return coquette[Random.Range(0, coquette.Count)];
         }
-        else if (type == CrabInfo.CrabType.crab && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.crab && Random.Range(0, 3) <= 2)
         {
             return crab[Random.Range(0, crab.Count)];
         }
-        else if (type == CrabInfo.CrabType.shrimp && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.shrimp && Random.Range(0, 3) <= 2)
         {
             return shrimp[Random.Range(0, shrimp.Count)];
         }
-        else if (type == CrabInfo.CrabType.lobster && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.lobster && Random.Range(0, 3) <= 2)
         {
             return lobster[Random.Range(0, lobster.Count)];
         }
-        else if (type == CrabInfo.CrabType.hermit && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.hermit && Random.Range(0, 3) <= 2)
         {
             return hermit[Random.Range(0, hermit.Count)];
         }
-        else if (type == CrabInfo.CrabType.seamonkeys && Random.Range(0, 3) == 2)
+        else if (type == CrabInfo.CrabType.seamonkeys && Random.Range(0, 3) <= 2)
         {
             return seamonkeys[Random.Range(0, seamonkeys.Count)];
+        }
+        else if (type == CrabInfo.CrabType.isopod && Random.Range(0, 3) <= 2)
+        {
+            return isopod[Random.Range(0, isopod.Count)];
+        }
+        else if (type == CrabInfo.CrabType.mustache && Random.Range(0, 3) <= 2)
+        {
+            return mustache[Random.Range(0, mustache.Count)];
+        }
+        else if (type == CrabInfo.CrabType.tall && Random.Range(0, 3) <= 2)
+        {
+            return tall[Random.Range(0, tall.Count)];
         }
         else
         {
