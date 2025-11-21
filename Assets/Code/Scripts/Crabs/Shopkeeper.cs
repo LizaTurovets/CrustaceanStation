@@ -1,6 +1,8 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Shopkeeper : MonoBehaviour
+public class Shopkeeper : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private GameObject wares;
     [SerializeField] private RectTransform rectTransform;
@@ -8,12 +10,17 @@ public class Shopkeeper : MonoBehaviour
     private Vector3 endPos = new Vector3(470.9427f, -31.97021f, 0);
     private Vector3 currentVelocity;
     private bool presented = false;
+    private Animator animator;
+
+    [Header("Tapped")]
+    [SerializeField] private GameObject coin;
 
     private void Awake()
     {
         isMoving = true;
         presented = false;
         wares.SetActive(false);
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -43,5 +50,16 @@ public class Shopkeeper : MonoBehaviour
     {
         //show all buttons
         wares.SetActive(true);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        coin.SetActive(true);
+        coin.GetComponent<Coin>().Clicked();
+        
+        animator.SetTrigger("tapped");
+        //give player a coin
+
+        
     }
 }

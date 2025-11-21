@@ -108,6 +108,8 @@ public class Kiosk : MonoBehaviour
 
         UpdateRating();
 
+        crabCountGoal.IncrementGoal(crabsToday);
+
         currentCrab.GetComponent<CrabController>().MakeDisappear();
         StartCoroutine(WaitAMoment());
     }
