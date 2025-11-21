@@ -18,7 +18,7 @@ public class TrainController : MonoBehaviour
     private Vector3 startingPosArrive; // where the train is before it moves into the station
     private Vector3 startingPosDepart; // also endPosArrive
     private Vector3 endPosDepart; // where the train goes to be completely offscreen
-    private float speed = 600.0f;
+    //private float speed = 600.0f;
     private Vector3 currentVelocity;
 
     // IDS and INFO
@@ -116,33 +116,33 @@ public class TrainController : MonoBehaviour
         float x = 0;
         if (trainInfo.trainID == 1)
         {
-            x = 194;
+            x = 148;
             //text.rectTransform.anchoredPosition = new Vector2(223, -23);
             //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(163, 28);
 
         }
         else if (trainInfo.trainID == 2)
         {
-            x = 394;
+            x = 348;
             //text.rectTransform.anchoredPosition = new Vector2(440, -23);
             //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(379, 28);
 
         }
         else if (trainInfo.trainID == 3)
         {
-            x = 594;
+            x = 548;
             //text.rectTransform.anchoredPosition = new Vector2(657, -23);
             //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(580, 28);
         }
         else if (trainInfo.trainID == 4)
         {
-            x = 794;
+            x = 748;
             //text.rectTransform.anchoredPosition = new Vector2(874, -23);
             //alertObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(781, 28); 
         }
 
         startingPosArrive = new Vector3(x, 830, 0);
-        startingPosDepart = new Vector3(x, -265.99f, 0);
+        startingPosDepart = new Vector3(x, -285f, 0);
         endPosDepart = new Vector3(x, -2426, 0);
         trainTransform.anchoredPosition = startingPosArrive;
 
@@ -156,7 +156,7 @@ public class TrainController : MonoBehaviour
 
     private void Start()
     {
-        int numOfCarts = UnityEngine.Random.Range(1, 5);
+        int numOfCarts = UnityEngine.Random.Range(1, 6);
         for (int i = 0; i < numOfCarts; i++)
         {
             // instantiate cart as child
@@ -168,18 +168,21 @@ public class TrainController : MonoBehaviour
             {
                 // set position based on cart type
                 float startingPos = selection.getStartingPos();
-                cart.transform.localPosition = new Vector3(-30, startingPos, 0);
+                //cart.transform.localPosition = new Vector3(0, startingPos, 0);
+                cart.transform.localPosition = new Vector3(0, 44, 0);
 
                 // add to cartPosStartingPoint
-                cartPosStartingPoint += startingPos + selection.getHeight();
+                //cartPosStartingPoint += startingPos + selection.getHeight();
+                cartPosStartingPoint += 44 + 137;
             }
             else
             {
                 // set position based on cartPosStartingPoint
-                cart.transform.localPosition = new Vector3(-30, cartPosStartingPoint, 0);
+                cart.transform.localPosition = new Vector3(0, cartPosStartingPoint, 0);
 
                 // add to cartPosStartingPoint
-                cartPosStartingPoint += selection.getHeight();
+                //cartPosStartingPoint += selection.getHeight();
+                cartPosStartingPoint += 137;
             }
 
             // add trainSelection to list
