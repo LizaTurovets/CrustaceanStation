@@ -1,9 +1,10 @@
 using System.Collections;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements.Experimental;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class Shop : MonoBehaviour
 {
@@ -14,17 +15,28 @@ public class Shop : MonoBehaviour
     [SerializeField] private int crabDropRate; // moar crabz
     [SerializeField] private int cartQuality; // unlocked train cart qualities
 
+    [Header("Upgrade Track")]
     [SerializeField] private int trackPrice;
     [SerializeField] private TextMeshProUGUI trackPriceText;
+    [SerializeField] private GameObject trackUpgradePanel;
+
+    [Header("Upgrade Crabs")]
     [SerializeField] private int crabPrice;
     [SerializeField] private TextMeshProUGUI crabPriceText;
+    [SerializeField] private GameObject crabUpgradePanel;
+
+    [Header("Upgrade Carts")]
     [SerializeField] private int cartPrice;
     [SerializeField] private TextMeshProUGUI cartPriceText;
+    [SerializeField] private GameObject cartUpgradePanel;
 
     private int shopMenu; // 1 for decor/upgrade, 2 for decor menu, 3 for upgrade menu
-    public GameObject ShopFns, Upgrades;
 
+    [Header("Other")]
+    public GameObject ShopFns, Upgrades;
     [SerializeField] private bool debug;
+
+    [SerializeField] private Color unavailable; // #BFBFBF
 
     private void Awake()
     {
@@ -48,9 +60,11 @@ public class Shop : MonoBehaviour
         numTracks = PlayerPrefs.GetInt("numTracks");
         crabDropRate = PlayerPrefs.GetInt("crabDropRate");
         cartQuality = PlayerPrefs.GetInt("cartQuality");
-        trackPrice = (int)(100 * (Mathf.Pow(2f, (float)numTracks)));
-        crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
-        cartPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
+        trackPrice = (int)(25 * (numTracks + 1)); //(Mathf.Pow(2f, (float)numTracks)));
+        crabPrice = (int)(25 * (crabDropRate + 1)); //(Mathf.Pow(2f, (float)crabDropRate)));
+        cartPrice = (int)(50 * (cartQuality + 1)); //(Mathf.Pow(2f, (float)crabDropRate)));
+
+        CheckBlur();
     }
 
     // switch to upgrade menu
@@ -59,14 +73,38 @@ public class Shop : MonoBehaviour
         shopMenu = 3;
         ShopFns.SetActive(false);
         Upgrades.SetActive(true);
-        trackPriceText.text = trackPrice.ToString();
-        crabPriceText.text = crabPrice.ToString();
-        cartPriceText.text = cartPrice.ToString();
+        if (numTracks != 3)
+        {
+            trackPriceText.text = trackPrice.ToString();
+        }
+        else
+        {
+            trackUpgradePanel.GetComponent<Button>().interactable = false;
+        }
+
+        if (crabDropRate != 3)
+        {
+            crabPriceText.text = crabPrice.ToString();
+        }
+        else
+        {
+            crabUpgradePanel.GetComponent<Button>().interactable = false;
+        }
+
+        if (cartQuality != 2)
+        {
+            cartPriceText.text = cartPrice.ToString();
+        }
+        else
+        {
+            cartUpgradePanel.GetComponent<Button>().interactable = false;
+        }
+        
     }
 
     // switch to decor menu
     public void Decor()
-    { 
+    {
         shopMenu = 2;
     }
 
@@ -86,7 +124,6 @@ public class Shop : MonoBehaviour
         }
         else if (shopMenu == 2)
         {
-            
             ShopMain();
         }
         else if (shopMenu == 3)
@@ -105,9 +142,18 @@ public class Shop : MonoBehaviour
             numTracks++;
             // update price and text here?
             PlayerPrefs.SetInt("numTracks", numTracks);
-            trackPrice = (int)(100 * (Mathf.Pow(2f, (float)numTracks)));
+            trackPrice = (int)(25 * (numTracks + 1));
             trackPriceText.text = (trackPrice).ToString();
             //Debug.Log(numTracks);
+
+            if (numTracks == 3)
+            {
+                ApplyBlur(trackUpgradePanel);
+                trackPriceText.text = "";
+                trackUpgradePanel.GetComponent<RectTransform>().Find("Text").Find("Desc").GetComponent<TMP_Text>().text = "Fully Upgraded";
+                trackUpgradePanel.GetComponent<RectTransform>().Find("Images").Find("PriceIcon").gameObject.SetActive(false);
+                trackUpgradePanel.GetComponent<Button>().interactable = false;
+            }
         }
     }
 
@@ -119,27 +165,85 @@ public class Shop : MonoBehaviour
             crabDropRate++;
             // update price and text here?
             PlayerPrefs.SetInt("crabDropRate", crabDropRate);
-            crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
+            crabPrice = (int)(25 * (crabDropRate + 1));
             crabPriceText.text = (crabPrice).ToString();
             //Debug.Log(crabDropRate);
+
+            if (crabDropRate == 3)
+            {
+                ApplyBlur(crabUpgradePanel);
+                crabPriceText.text = "";
+                crabUpgradePanel.GetComponent<RectTransform>().Find("Text").Find("Desc").GetComponent<TMP_Text>().text = "Fully Upgraded";
+                crabUpgradePanel.GetComponent<RectTransform>().Find("Images").Find("PriceIcon").gameObject.SetActive(false);
+                crabUpgradePanel.GetComponent<Button>().interactable = false;
+            }
         }
     }
     public void Carts()
     {
-        if (PlayerPrefs.GetInt("coins") >= cartPrice  && cartQuality < 2) // 0 is economy, 1 is standard, 2 is deluxe
+        if (PlayerPrefs.GetInt("coins") >= cartPrice && cartQuality < 2) // 0 is economy, 1 is standard, 2 is deluxe
         {
             Purchase(cartPrice);
             cartQuality++;
             // update price and text here?
             PlayerPrefs.SetInt("cartQuality", cartQuality);
-            cartPrice = (int)(100 * (Mathf.Pow(2f, (float)cartQuality)));
+            cartPrice = (int)(50 * (cartQuality + 1));
             cartPriceText.text = (cartPrice).ToString();
             //Debug.Log(cartPrice);
+
+            if (cartQuality == 2)
+            {
+                ApplyBlur(cartUpgradePanel);
+                cartPriceText.text = "";
+                cartUpgradePanel.GetComponent<RectTransform>().Find("Text").Find("Desc").GetComponent<TMP_Text>().text = "Fully Upgraded";
+                cartUpgradePanel.GetComponent<RectTransform>().Find("Images").Find("PriceIcon").gameObject.SetActive(false);
+                cartUpgradePanel.GetComponent<Button>().interactable = false;
+            }
         }
     }
     public void Purchase(int price)
     {
         PlayerPrefs.SetInt("coins", PlayerPrefs.GetInt("coins") - price);
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
+
+        CheckBlur();
+    }
+
+    private void CheckBlur()
+    {
+        if (PlayerPrefs.GetInt("coins") < trackPrice)
+        {
+            //blur
+            ApplyBlur(trackUpgradePanel);
+            trackUpgradePanel.GetComponent<Button>().interactable = false;
+
+        }
+        if (PlayerPrefs.GetInt("coins") < crabPrice)
+        {
+            // blur
+            ApplyBlur(crabUpgradePanel);
+            crabUpgradePanel.GetComponent<Button>().interactable = false;
+        }
+        if (PlayerPrefs.GetInt("coins") < cartPrice)
+        {
+            // blur
+            ApplyBlur(cartUpgradePanel);
+            cartUpgradePanel.GetComponent<Button>().interactable = false;
+        }
+    }
+
+    private void ApplyBlur(GameObject upgrade)
+    {
+        Transform imageChild = upgrade.GetComponent<RectTransform>().Find("Images");
+        Transform textChild = upgrade.GetComponent<RectTransform>().Find("Text");
+
+        foreach (Transform image in imageChild)
+        {
+            image.gameObject.GetComponent<UnityEngine.UI.Image>().color = unavailable;
+        }
+        foreach (Transform text in textChild)
+        {
+            text.gameObject.GetComponent<TMP_Text>().color = unavailable;
+        }
     }
 }

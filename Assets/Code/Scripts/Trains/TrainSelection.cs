@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 public class TrainSelection : MonoBehaviour, IPointerClickHandler
 {
     private bool isClickable = false;
     private bool isFull = false;
     private Kiosk kiosk;
 
-    private SpriteRenderer spriteRenderer;
+    private Image spriteRenderer;
     [SerializeField] private Sprite filled;
     private TrainController trainController;
 
@@ -50,7 +51,7 @@ public class TrainSelection : MonoBehaviour, IPointerClickHandler
 
 	private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<Image>();
     }
 	public void OnPointerClick(PointerEventData eventData)
     {

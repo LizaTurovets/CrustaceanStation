@@ -37,18 +37,15 @@ public class Clock : MonoBehaviour
 
     // TRAIN ARRAYS
     private List<GameObject>[] allTrains;
+    private int numActiveTracks = 1;
 
-    private void Awake()
-    {
-        allTrains = new List<GameObject>[4];
-    }
 
     private void AddTrains()
     {
         bool startingTrain = false;    // is there a train that arrives before the first crab does?
 
         // goes through all of the trainIDs (lines) and fills it with disjoint trains
-        for (int i = 0; i < allTrains.Length; i++)
+        for (int i = 0; i < numActiveTracks; i++)
         {
             allTrains[i] = AddTrainsToLine(i + 1);
             if (allTrains[i][0].GetComponent<TrainController>().IsStartTime0())
@@ -56,10 +53,10 @@ public class Clock : MonoBehaviour
                 startingTrain = true;
             }
         }
-
+        
         if (!startingTrain)
         {
-            allTrains[Random.Range(0, allTrains.Length)][0].GetComponent<TrainController>().SetArrivalTime();
+            allTrains[Random.Range(0, numActiveTracks)][0].GetComponent<TrainController>().SetArrivalTime();
         }
 
     }
@@ -137,6 +134,12 @@ public class Clock : MonoBehaviour
         {
             train.SetThisClickable(allowClick);
         }
+    }
+
+    public void UpdateNumTracks(int tracks)
+    {
+        allTrains = new List<GameObject>[tracks];
+        numActiveTracks = tracks;
     }
 
     public void BeginDay()

@@ -18,9 +18,6 @@ public class RatingGoal : MonoBehaviour
 
     [SerializeField] private Image background;
 
-    [SerializeField] private Color valid;
-    [SerializeField] private Color notValid;
-
     [SerializeField] private Slider goalScreenSlider;
 
     private void Awake()
@@ -34,15 +31,6 @@ public class RatingGoal : MonoBehaviour
     {
         ratingsSlider.value = newRating;
         rating = newRating;
-
-        if (rating >= goal)
-        {
-            background.color = valid;
-        }
-        else
-        {
-            background.color = notValid;
-        }
     }
 
     public float GetRating()
@@ -59,6 +47,7 @@ public class RatingGoal : MonoBehaviour
     {
         isGoalActive = true;
         ratingsSliderObject.SetActive(true);
+        ratingsSlider.value = 1f;
 
         goal = Random.Range(5, 11);
         goalScreenSlider.value = goal / 10f;

@@ -14,6 +14,8 @@ public class DisplayScrpt : MonoBehaviour
     [SerializeField] private bool paused;
 
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private GameObject settings;
+    [SerializeField] private GameObject tutorial;
 
     void Start()
     {
@@ -25,7 +27,7 @@ public class DisplayScrpt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && LevelManager.instance.HasStarted())
+        if (Input.GetKeyDown(KeyCode.Escape) && LevelManager.instance.HasStarted() && !settings.activeSelf && !tutorial.activeSelf)
         {
             // pause
             if (!displayed)
@@ -98,11 +100,17 @@ public class DisplayScrpt : MonoBehaviour
 
     public void Back2menu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("TitleScreen");
     }
 
     public void OnSettings()
     {
-        //SceneManager.LoadScene("Settings");
+        settings.SetActive(true);
+    }
+
+    public void OnTutorial()
+    {
+        tutorial.SetActive(true);
     }
 }

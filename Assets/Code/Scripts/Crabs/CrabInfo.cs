@@ -16,7 +16,12 @@ public class CrabInfo : ScriptableObject
 		shrimp,
 		lobster,
 		hermit,
-		seamonkeys
+		seamonkeys,
+		isopod,
+		tall,
+		mustache,
+		isopodTiny,
+		ittybitty
 	}
 
 	public CrabType type;
