@@ -1,5 +1,4 @@
 using System.Collections;
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,9 +60,9 @@ public class Shop : MonoBehaviour
         numTracks = PlayerPrefs.GetInt("numTracks");
         crabDropRate = PlayerPrefs.GetInt("crabDropRate");
         cartQuality = PlayerPrefs.GetInt("cartQuality");
-        trackPrice = (int)(25 * (Mathf.Pow(2f, (float)numTracks)));
-        crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
-        cartPrice = (int)(50 * (Mathf.Pow(2f, (float)crabDropRate)));
+        trackPrice = (int)(25 * (numTracks + 1)); //(Mathf.Pow(2f, (float)numTracks)));
+        crabPrice = (int)(25 * (crabDropRate + 1)); //(Mathf.Pow(2f, (float)crabDropRate)));
+        cartPrice = (int)(50 * (cartQuality + 1)); //(Mathf.Pow(2f, (float)crabDropRate)));
 
         CheckBlur();
     }
@@ -143,7 +142,7 @@ public class Shop : MonoBehaviour
             numTracks++;
             // update price and text here?
             PlayerPrefs.SetInt("numTracks", numTracks);
-            trackPrice = (int)(100 * (Mathf.Pow(2f, (float)numTracks)));
+            trackPrice = (int)(25 * (numTracks + 1));
             trackPriceText.text = (trackPrice).ToString();
             //Debug.Log(numTracks);
 
@@ -166,7 +165,7 @@ public class Shop : MonoBehaviour
             crabDropRate++;
             // update price and text here?
             PlayerPrefs.SetInt("crabDropRate", crabDropRate);
-            crabPrice = (int)(100 * (Mathf.Pow(2f, (float)crabDropRate)));
+            crabPrice = (int)(25 * (crabDropRate + 1));
             crabPriceText.text = (crabPrice).ToString();
             //Debug.Log(crabDropRate);
 
@@ -188,7 +187,7 @@ public class Shop : MonoBehaviour
             cartQuality++;
             // update price and text here?
             PlayerPrefs.SetInt("cartQuality", cartQuality);
-            cartPrice = (int)(100 * (Mathf.Pow(2f, (float)cartQuality)));
+            cartPrice = (int)(50 * (cartQuality + 1));
             cartPriceText.text = (cartPrice).ToString();
             //Debug.Log(cartPrice);
 
@@ -222,8 +221,8 @@ public class Shop : MonoBehaviour
         if (PlayerPrefs.GetInt("coins") < crabPrice)
         {
             // blur
-            //ApplyBlur(crabUpgradePanel);
-            //crabUpgradePanel.GetComponent<Button>().interactable = false;
+            ApplyBlur(crabUpgradePanel);
+            crabUpgradePanel.GetComponent<Button>().interactable = false;
         }
         if (PlayerPrefs.GetInt("coins") < cartPrice)
         {

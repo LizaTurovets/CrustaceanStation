@@ -22,10 +22,13 @@ public class Kiosk : MonoBehaviour
     [SerializeField] private RatingGoal ratingGoal;
     [SerializeField] private CrabCountGoal crabCountGoal;
 
+    private int crabSpeed = 5;
+
     private void Awake()
     {
         crabSelector = GetComponent<CrabSelector>();
         coinCountText.text = PlayerPrefs.GetInt("coins").ToString();
+        SetCrabSpeedUpgrade();
     }
 
     public void SummonCrab()
@@ -133,7 +136,7 @@ public class Kiosk : MonoBehaviour
 
     private IEnumerator WaitAMoment()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(crabSpeed);
 
         Destroy(currentCrab);
 
@@ -141,6 +144,28 @@ public class Kiosk : MonoBehaviour
         {
             SummonCrab();
         }
+    }
+
+    public void SetCrabSpeedUpgrade()
+    {
+        int dropRate = PlayerPrefs.GetInt("crabDropRate");
+        if (dropRate == 0)
+        {
+            crabSpeed = 5;
+        }
+        else if (dropRate == 1)
+        {
+            crabSpeed = 4;
+        }
+        else if (dropRate == 2)
+        {
+            crabSpeed = 3;
+        }
+        else if (dropRate == 3)
+        {
+            crabSpeed = 2;
+        }
+
     }
 
     public int GetTotalCrabs()

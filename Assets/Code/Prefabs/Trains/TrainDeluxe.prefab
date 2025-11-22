@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f09a797db9a14161a7c91ef00a38b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainSelection
-  filled: {fileID: -670994719, guid: 3aa2a33fec11f41b2b5aee3e8e9d4c38, type: 3}
+  filled: {fileID: -1531127680, guid: 1b37ecb6f04ab4ef280071e49c72e0cb, type: 3}
   cartInfo: {fileID: 11400000, guid: 3822dbecdac5348569c257f3573aae08, type: 2}
 --- !u!61 &7994573773553801819
 BoxCollider2D:

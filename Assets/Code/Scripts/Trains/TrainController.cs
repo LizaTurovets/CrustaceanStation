@@ -278,7 +278,7 @@ public class TrainController : MonoBehaviour
         int maxCartQuality = LevelManager.instance.GetCartQuality() + 1;
         int totalWeight = 0;
         //for (CartType type in cartTypes)
-        for (int i = 0; i < maxCartQuality; i++)
+        for (int i = 0; i < 3; i++)
         {
             totalWeight += cartTypes[i].weight;
         }
